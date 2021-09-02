@@ -15,6 +15,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    Const.h \
     Heads.h \
     Soldier.h \
     Struct_Use.h \
