@@ -1,8 +1,7 @@
 #include "Unit.h"
 
-Unit::Unit(QString name,int _x,int _y,int _blood,int _attack)
-{
-    Name=name;
+Unit::Unit(int _x,int _y,int _blood,int _attack)
+{    
     Loc.x=_x;
     Loc.y=_y;
     Blood=_blood;

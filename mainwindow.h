@@ -15,6 +15,17 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void paintEvent(QPaintEvent * event);
+    QImage  pixmap;
+    void Initpixmap();
+    void timerEvent(QTimerEvent *);
+
+    int eventId1;
+    int curIndex;
+
+
+
+
 private:
     Ui::MainWindow *ui;
 };
