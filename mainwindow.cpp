@@ -3,15 +3,24 @@
 #include <QPainter>
 #include "Const.h"
 #include <QDebug>
+#include "Heads.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    resize(1280,640);
-    curIndex=0;
-    eventId1=startTimer(100);
-    Initpixmap();
+    resize(960,640);
+    QPixmap pixmap(":/images/Res/bkg.png");
+    QPalette palette;
+    palette.setBrush(backgroundRole(),QBrush(pixmap));
+    setPalette(palette);
+    eventId1=startTimer(50);
+    for (int i=0;i<5;i++)
+    {
+        Soldiers.append(new Soldier(64*i,64,100,100,5));
+        Soldiers[i]->Pic_State=0;
+        Soldiers[i]->Set_TySt(i,0);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -23,22 +32,24 @@ MainWindow::~MainWindow()
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-    painter.drawImage(100,100,pixmap,64*curIndex,0,64,64);
+    for (int i=0;i<5;i++)
+    {
+        painter.drawImage(Soldiers[i]->Get_Loc().x,Soldiers[i]->Get_Loc().y,Soldiers[i]->Img,64*Soldiers[i]->Pic_State,64*Soldiers[i]->Get_Type(),64,64);
+    }
 }
 
 void MainWindow::timerEvent(QTimerEvent * ev)
 {
-    curIndex++;
-    if(curIndex>=5)
+    if (Window_State==0)
     {
-        curIndex=0;
+        for(int i=0;i<5;i++)
+        {
+            Soldiers[i]->Pic_State++;
+            if (Soldiers[i]->Pic_State==Soldiers[i]->Get_Picmax())
+                Soldiers[i]->Pic_State=0;
+            repaint();
+        }
     }
-    repaint();
 }
 
-void MainWindow::Initpixmap()
-{
-        QString fileName=QString(":/images/Res/Red.bmp");
-        qDebug("%s\n",qPrintable(fileName));
-        pixmap.load(fileName);
-}
+

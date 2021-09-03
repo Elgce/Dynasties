@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    Leader.cpp \
     Soldier.cpp \
     Unit.cpp \
     main.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
 HEADERS += \
     Const.h \
     Heads.h \
+    Leader.h \
     Soldier.h \
     Struct_Use.h \
     Unit.h \

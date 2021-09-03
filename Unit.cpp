@@ -1,11 +1,12 @@
 #include "Unit.h"
 
-Unit::Unit(int _x,int _y,int _blood,int _attack)
+Unit::Unit(int _x,int _y,int _blood,int _attack,int _picmax)
 {    
     Loc.x=_x;
     Loc.y=_y;
     Blood=_blood;
     Attack=_attack;
+    Pic_Max=_picmax;
 }
 
 Location Unit::Get_Loc() const
@@ -53,10 +54,6 @@ void Unit::Add_Armor(int _new)
 }
 
 
-void Unit::Set_PicMax(int _max)
-{
-    Pic_Max=_max;
-}
 
 void Unit::Change_Num(int _num)
 {
@@ -68,4 +65,31 @@ void Unit::Change_Num(int _num)
 void Unit::Set_PicPath(QString _path)
 {
     Pic_Path=_path;
+}
+
+int Unit::Get_Picmax()
+{
+    return Pic_Max;
+}
+
+void Unit::Dam_Blood(int _blood)
+{
+    Blood-=_blood;
+}
+
+void Unit::Convert_Tranparent()
+{
+    Img=Img.convertToFormat(QImage::Format_ARGB32);
+    union myrgb
+    {
+        uint rgba;
+        uchar rgba_bits[4];
+    };
+    myrgb * mybits=(myrgb*) Img.bits();
+    int len=Img.width()*Img.height();
+    while(len-->0)
+    {
+        mybits->rgba_bits[3]=(mybits->rgba==0xFFFFFFFF)?0:255;
+        mybits++;
+    }
 }

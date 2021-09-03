@@ -6,7 +6,8 @@
 #include "Unit.h"
 #include "Soldier.h"
 #include "Struct_Use.h"
-
-
+#include <QPalette>
+#include "Leader.h"
+#include <QVector>
 
 #endif // HEADS_H

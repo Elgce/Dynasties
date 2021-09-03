@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "Heads.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -16,13 +17,11 @@ public:
     ~MainWindow();
 
     void paintEvent(QPaintEvent * event);
-    QImage  pixmap;
-    void Initpixmap();
     void timerEvent(QTimerEvent *);
 
     int eventId1;
-    int curIndex;
-
+    int Window_State=0;
+    QVector<Soldier*>Soldiers;
 
 
 

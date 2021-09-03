@@ -7,15 +7,16 @@
 
 class Soldier:public Unit
 {
+    Q_OBJECT
 public:
-    Soldier(int _x,int _y,int _blood,int _attack):Unit(_x,_y,_blood,_attack){}
+    Soldier(int _x,int _y,int _blood,int _attack,int _maxpic):Unit(_x,_y,_blood,_attack,_maxpic){}
     ~Soldier(){}
 public:
-    int Get_Type();
-    int Get_Stand();
+    int Get_Type() const;
+    int Get_Stand() const;
     void Set_TySt(int,int);
 public:
-    QImage Img;
+    int Pic_State;
 public slots:
 
 

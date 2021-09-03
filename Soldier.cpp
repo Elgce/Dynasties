@@ -6,11 +6,26 @@ void Soldier::Set_TySt(int _type, int _stand)
     Stand=_stand;
     if(Stand==0)
     {
-        Img.load("");
+        Img.load(":/images/Res/Blue.bmp");
     }
     else
     {
-        Img.load("");
+        Img.load(":/images/Res/Red.bmp");
+
     }
+    Convert_Tranparent();
 
 }
+
+
+int Soldier::Get_Stand() const
+{
+    return Stand;
+}
+
+int Soldier::Get_Type() const
+{
+    return Type;
+}
+
+
