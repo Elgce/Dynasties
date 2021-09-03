@@ -20,6 +20,7 @@ public:
     void timerEvent(QTimerEvent *);
     void Set_Bkg(QPixmap);
     void Init_Soldiers();
+    void Init_Clor();
     QPixmap bkg_map;
 
     int eventId1;
@@ -31,5 +32,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    bool Click_Unit=false;
 };
 #endif // MAINWINDOW_H

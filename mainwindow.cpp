@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     bkg_map=QPixmap(":/images/Res/bkg.png");
     Set_Bkg(bkg_map);
     Init_Soldiers();
+    Init_Clor();
     eventId1=startTimer(50);
 
 
@@ -34,6 +35,16 @@ void MainWindow::paintEvent(QPaintEvent *event)
     {
         painter.drawImage(Soldiers[i]->Get_Loc().x,Soldiers[i]->Get_Loc().y,Soldiers[i]->Img,PIC_WIDTH*(Soldiers[i]->Pic_State+Soldiers[i]->Get_Stand()*Soldiers[i]->Get_Picmax()+1),PIC_HEIGHT*Soldiers[i]->Get_Type(),PIC_HEIGHT,PIC_WIDTH);
     }
+    for (int i=0;i<Clor_Blocks.size();i++)
+    {
+        //if(Clor_Blocks[i]->is_print==true)
+        {
+            painter.setBrush(QBrush(Clor_Blocks[i]->Get_Clor()));
+            painter.drawRect(Clor_Blocks[i]->Get_Loc().x,Clor_Blocks[i]->Get_Loc().y,PIC_HEIGHT,PIC_WIDTH);
+        }
+
+
+    }
 }
 
 void MainWindow::timerEvent(QTimerEvent * ev)
@@ -44,8 +55,6 @@ void MainWindow::timerEvent(QTimerEvent * ev)
         {
             Soldiers[i]->Pic_State++;
             Soldiers[i]->Pic_State%=Soldiers[i]->Get_Picmax();
-
-
         }
     }
     repaint();
@@ -98,4 +107,19 @@ void MainWindow::Init_Soldiers()
             }
         }
 }
+
+void MainWindow::Init_Clor()
+{
+    for (int i=0;i<WIDTH_NUM;i++)
+    {
+        for (int j=0;j<HEIGHT_NUM;j++)
+        {
+            if(isLoad[i][j]==0)
+            {
+                Clor_Blocks.append(new Clor_Block(i*PIC_WIDTH,j*PIC_HEIGHT,QColor(152,251,152,100)));
+            }
+        }
+    }
+}
+
 
