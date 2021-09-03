@@ -26,7 +26,7 @@ public:
     int Window_State=0;
     int isLoad[WIDTH_NUM][HEIGHT_NUM];
     QVector<Soldier*>Soldiers;
-
+    QVector<Clor_Block*>Clor_Blocks;
 
 
 private:

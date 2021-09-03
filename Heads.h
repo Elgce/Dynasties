@@ -10,5 +10,7 @@
 #include "Leader.h"
 #include <QVector>
 #include <Const.h>
+#include "Clor_Block.h"
+
 
 #endif // HEADS_H

@@ -64,7 +64,7 @@ void MainWindow::Init_Soldiers()
     {
         for (int j=0;j<HEIGHT_NUM;j++)
         {
-            isLoad[i][j]=1;
+            isLoad[i][j]=0;
         }
     }
 
@@ -74,7 +74,7 @@ void MainWindow::Init_Soldiers()
         {
             if(i%5==0 && j%5==0)
             {
-                isLoad[i][j]=0;isLoad[30-i][j]=0;
+                isLoad[i][j]=1;isLoad[30-i][j]=-1;
             }
         }
 
@@ -82,13 +82,11 @@ void MainWindow::Init_Soldiers()
     for (int i=0;i<WIDTH_NUM;i++)
         for(int j=0;j<HEIGHT_NUM;j++)
         {
-            if(isLoad[i][j]==0)
+            if(isLoad[i][j]!=0)
             {
-                qDebug("%d %d\n",i,j);
-
                 Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,5));
                 Soldiers[Soldiers.size()-1]->Pic_State=0;
-                if(i<15)
+                if(isLoad[i][j]==1)
                 {
                     Soldiers[Soldiers.size()-1]->Set_TySt(j,0);
                 }
@@ -100,3 +98,4 @@ void MainWindow::Init_Soldiers()
             }
         }
 }
+
