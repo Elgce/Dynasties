@@ -2,8 +2,8 @@
 
 void Soldier::Set_TySt(int _type, int _stand)
 {
-    Type=_type;
-    Stand=_stand;
+    Type=_type % 5;
+    Stand=_stand % 2;
     if(Stand==0)
     {
         Img.load(":/images/Res/Blue.bmp");

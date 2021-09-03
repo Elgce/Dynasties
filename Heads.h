@@ -9,5 +9,6 @@
 #include <QPalette>
 #include "Leader.h"
 #include <QVector>
+#include <Const.h>
 
 #endif // HEADS_H

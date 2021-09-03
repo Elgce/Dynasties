@@ -18,9 +18,13 @@ public:
 
     void paintEvent(QPaintEvent * event);
     void timerEvent(QTimerEvent *);
+    void Set_Bkg(QPixmap);
+    void Init_Soldiers();
+    QPixmap bkg_map;
 
     int eventId1;
     int Window_State=0;
+    int isLoad[WIDTH_NUM][HEIGHT_NUM];
     QVector<Soldier*>Soldiers;
 
 
