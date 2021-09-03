@@ -24,8 +24,7 @@ public:
     void Set_PicPath(QString);  //Set the path of picture
     int Get_Picmax();
     void Convert_Tranparent();
-
-
+    void Change_Loc(int,int);
 
 public:
     QImage Img;
@@ -34,7 +33,7 @@ public:
 
 public slots:
     void Add_Blood(int);
-    void Change_Loc(int,int);
+
     void Change_Speed(double,double);
     void Add_Armor(int);
     void Change_Num(int);

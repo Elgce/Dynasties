@@ -10,7 +10,7 @@
 #include "Leader.h"
 #include <QVector>
 #include <Const.h>
-#include "Clor_Block.h"
-
+#include <QMouseEvent>
+#include <QMainWindow>
 
 #endif // HEADS_H

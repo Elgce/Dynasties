@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 #include "Heads.h"
 
 QT_BEGIN_NAMESPACE
@@ -20,18 +19,20 @@ public:
     void timerEvent(QTimerEvent *);
     void Set_Bkg(QPixmap);
     void Init_Soldiers();
-    void Init_Clor();
+    void mousePressEvent(QMouseEvent* event);
+
     QPixmap bkg_map;
 
     int eventId1;
     int Window_State=0;
     int isLoad[WIDTH_NUM][HEIGHT_NUM];
     QVector<Soldier*>Soldiers;
-    QVector<Clor_Block*>Clor_Blocks;
 
 
 private:
     Ui::MainWindow *ui;
     bool Click_Unit=false;
+    bool is_PrintBlock=false;
+    int num_inControl=-1;
 };
 #endif // MAINWINDOW_H
