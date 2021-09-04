@@ -31,7 +31,6 @@ public:
     QVector<Soldier*>Against_Soldiers;
 
 
-
     void Init_Blocks();
 public slots:
 

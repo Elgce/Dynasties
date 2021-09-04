@@ -37,6 +37,11 @@ void MainWindow::paintEvent(QPaintEvent *event)
     for (int i=0;i<Soldiers.size();i++)
     {
         painter.drawImage(Soldiers[i]->Get_Loc().x,Soldiers[i]->Get_Loc().y,Soldiers[i]->Img,PIC_WIDTH*(Soldiers[i]->Pic_State),PIC_HEIGHT*Soldiers[i]->Get_Type(),PIC_HEIGHT,PIC_WIDTH);
+        painter.setPen(QPen(Qt::white,2));
+        painter.drawLine(Soldiers[i]->Get_Loc().x+4,Soldiers[i]->Get_Loc().y-8,Soldiers[i]->Get_Loc().x+20,Soldiers[i]->Get_Loc().y-8);
+        painter.setPen(QPen(Qt::red,1));
+        painter.drawLine(Soldiers[i]->Get_Loc().x+4,Soldiers[i]->Get_Loc().y-8,Soldiers[i]->Get_Loc().x+20*(double(Soldiers[i]->Get_Blood()/100)),Soldiers[i]->Get_Loc().y-8);
+
     }
 
     if(Against_Soldiers.size()>0)
@@ -44,9 +49,14 @@ void MainWindow::paintEvent(QPaintEvent *event)
         for (int i=0;i<Against_Soldiers.size();i++)
         {
             painter.drawImage(Against_Soldiers[i]->Get_Loc().x,Against_Soldiers[i]->Get_Loc().y,Against_Soldiers[i]->Img,PIC_WIDTH*(Against_Soldiers[i]->Pic_State+Against_Soldiers[i]->Get_Picmax()+1),PIC_HEIGHT*Against_Soldiers[i]->Get_Type(),PIC_HEIGHT,PIC_WIDTH);
+
+            painter.setPen(QPen(Qt::white,2));
+            painter.drawLine(Against_Soldiers[i]->Get_Loc().x+4,Against_Soldiers[i]->Get_Loc().y-8,Against_Soldiers[i]->Get_Loc().x+20,Against_Soldiers[i]->Get_Loc().y-8);
+            painter.setPen(QPen(Qt::red,1));
+            painter.drawLine(Against_Soldiers[i]->Get_Loc().x+4,Against_Soldiers[i]->Get_Loc().y-8,Against_Soldiers[i]->Get_Loc().x+20*(double(Against_Soldiers[i]->Get_Blood()/100)),Against_Soldiers[i]->Get_Loc().y-8);
         }
     }
-
+    painter.setPen(QPen(Qt::black,1));
     //draw all of the clor_blocks
     for (int i=0;i<WIDTH_NUM;i++)
     {
