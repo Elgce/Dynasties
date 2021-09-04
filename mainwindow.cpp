@@ -153,28 +153,38 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         int _y=event->y()/PIC_HEIGHT;
         if(Click_Unit==false && isLoad[_x][_y]==2)
         {
-            Click_Unit=true;
-            isLoad[_x][_y]=1;
-
-            is_PrintBlock=true;
-
-
             if(Soldiers.size()>0)
-            for (int i=0;i<Soldiers.size();i++)
             {
-                if (Soldiers[i]->Get_Loc().x==_x*PIC_WIDTH && Soldiers[i]->Get_Loc().y==_y*PIC_HEIGHT)
+                for (int i=0;i<Soldiers.size();i++)
                 {
-                    num_inControl=i;
+                    if (Soldiers[i]->Get_Loc().x==_x*PIC_WIDTH && Soldiers[i]->Get_Loc().y==_y*PIC_HEIGHT)
+                    {
 
-                    break;
+                        num_inControl=i;
+                        if(Soldiers[num_inControl]->Time_Moved>=Soldiers[num_inControl]->Get_Movemax())
+                        {
+                            num_inControl=-1;
+                        }
+                        break;
+                    }
                 }
             }
-            for(int i=0;i<WIDTH_NUM;i++)
+            if(num_inControl!=-1)
             {
-                for (int j=0;j<HEIGHT_NUM;j++)
+                Click_Unit=true;
+                isLoad[_x][_y]=1;
+
+                is_PrintBlock=true;
+
+
+
+                for(int i=0;i<WIDTH_NUM;i++)
                 {
-                    if((qAbs(i-_x)+qAbs(j-_y))<=Soldiers[num_inControl]->Get_Speed() && (i!=_x || j!=_y))
+                    for (int j=0;j<HEIGHT_NUM;j++)
+                    {
+                        if((qAbs(i-_x)+qAbs(j-_y))<=Soldiers[num_inControl]->Get_Speed() && (i!=_x || j!=_y))
                         Clor_Block[i][j]=true;
+                    }
                 }
             }
         }
@@ -184,8 +194,9 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
             is_PrintBlock=false;
             Init_Blocks();
-            isLoad[_x][_y]=3;
+            isLoad[_x][_y]=2;
             Soldiers[num_inControl]->Change_Loc(_x*PIC_WIDTH,_y*PIC_HEIGHT);
+            Soldiers[num_inControl]->Time_Moved++;
             num_inControl=-1;
         }
 

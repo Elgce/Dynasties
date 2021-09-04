@@ -26,6 +26,8 @@ public:
     void Change_Loc(int,int);
     void Change_Speed(int);
     int Get_Speed() const;
+    int Get_Movemax() const;
+    int Time_Moved=0;
 public:
     QImage Img;
 
@@ -50,7 +52,7 @@ signals:
 
 private:
 
-
+    int Move_Num=2;
     Location Loc;
     int Speed;
     int Blood;

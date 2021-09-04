@@ -94,3 +94,8 @@ void Unit::Convert_Tranparent()
     }
 }
 
+int Unit::Get_Movemax() const
+{
+    return Move_Num;
+}
+

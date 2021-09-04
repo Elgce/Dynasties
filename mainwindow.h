@@ -29,6 +29,8 @@ public:
     bool Clor_Block[WIDTH_NUM][HEIGHT_NUM];
     QVector<Soldier*>Soldiers;
     QVector<Soldier*>Against_Soldiers;
+
+
     void Init_Blocks();
 public slots:
 
