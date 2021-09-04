@@ -13,7 +13,6 @@ public:
 
 public:
     QString Get_Name();
-    void Explo(Unit *);
 
 public slots:
     void State_Changed(QString);

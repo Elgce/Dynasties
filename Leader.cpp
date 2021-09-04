@@ -13,8 +13,3 @@ QString Leader::Get_Name()
 {
     return Name;
 }
-
-void Leader::Explo(Unit * uni)
-{
-
-}

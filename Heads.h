@@ -16,5 +16,7 @@
 #include <QPainter>
 #include <QPushButton>
 #include <QtMath>
+#include <QMenu>
+#include <QAction>
 
 #endif // HEADS_H

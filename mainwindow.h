@@ -20,7 +20,7 @@ public:
     void Set_Bkg(QPixmap);
     void Init_Soldiers();
     void mousePressEvent(QMouseEvent* event);
-
+    void init_SoldierState(Soldier *);
     QPixmap bkg_map;
 
     int eventId1;
@@ -29,6 +29,7 @@ public:
     bool Clor_Block[WIDTH_NUM][HEIGHT_NUM];
     QVector<Soldier*>Soldiers;
     QVector<Soldier*>Against_Soldiers;
+
 
 
     void Init_Blocks();
@@ -41,5 +42,6 @@ private:
     bool Click_Unit=false;
     bool is_PrintBlock=false;
     int num_inControl=-1;
+    QMenu * Soldier_State;
 };
 #endif // MAINWINDOW_H

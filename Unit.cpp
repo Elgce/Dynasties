@@ -99,3 +99,13 @@ int Unit::Get_Movemax() const
     return Move_Num;
 }
 
+
+void Unit::Set_Attack(int _attack)
+{
+    Attack=_attack;
+}
+
+void Unit::Set_Armor(int _armor)
+{
+    Armor=_armor;
+}

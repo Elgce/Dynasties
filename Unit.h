@@ -28,6 +28,8 @@ public:
     int Get_Speed() const;
     int Get_Movemax() const;
     int Time_Moved=0;
+    void Set_Attack(int);
+    void Set_Armor(int);
 public:
     QImage Img;
 
@@ -57,7 +59,7 @@ private:
     int Speed;
     int Blood;
     int Attack;
-    int Armor=0;
+    int Armor=20;
     int Pic_Num=0;
     int Pic_Max;
     QString Pic_Path="";

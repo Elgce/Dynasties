@@ -193,6 +193,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             Click_Unit=false;
 
             is_PrintBlock=false;
+            init_SoldierState(Soldiers[num_inControl]);
+            Soldier_State->popup(event->globalPos());
             Init_Blocks();
             isLoad[_x][_y]=2;
             Soldiers[num_inControl]->Change_Loc(_x*PIC_WIDTH,_y*PIC_HEIGHT);
@@ -215,3 +217,19 @@ void MainWindow::Init_Blocks()
     }
 }
 
+void MainWindow::init_SoldierState(Soldier * _soldier)
+{
+    Soldier_State=new QMenu(this);
+    QAction *pAction_attack=new QAction(Soldier_State);
+    QAction *pAction_defense=new QAction(Soldier_State);
+    QAction *pAction_static=new QAction(Soldier_State);
+    pAction_attack->setText("Attack");
+    Soldier_State->addAction(pAction_attack);
+    connect(pAction_attack,SIGNAL(triggered()),_soldier,SLOT(To_Attack()));
+    pAction_defense->setText("Defense");
+    Soldier_State->addAction(pAction_defense);
+    connect(pAction_defense,SIGNAL(triggered()),_soldier,SLOT(To_Defense()));
+    pAction_static->setText("Static");
+    Soldier_State->addAction(pAction_static);
+    connect(pAction_static,SIGNAL(triggered()),_soldier,SLOT(To_Static()));
+}
