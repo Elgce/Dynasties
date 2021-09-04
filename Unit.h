@@ -25,7 +25,7 @@ public:
     int Get_Picmax();
     void Convert_Tranparent();
     void Change_Loc(int,int);
-
+    void Change_Speed(double,double);
 public:
     QImage Img;
 
@@ -34,7 +34,7 @@ public:
 public slots:
     void Add_Blood(int);
 
-    void Change_Speed(double,double);
+
     void Add_Armor(int);
     void Change_Num(int);
     void Dam_Blood(int);
@@ -49,6 +49,8 @@ signals:
 
 
 private:
+    Min_Dis Dist;//has not been solved
+
 
     Location Loc;
     Speed Spd;

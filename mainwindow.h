@@ -21,18 +21,25 @@ public:
     void Init_Soldiers();
     void mousePressEvent(QMouseEvent* event);
 
+    double Sol_Dir(Soldier*,Soldier*);//back the distance between two soldiers
     QPixmap bkg_map;
 
     int eventId1;
     int Window_State=0;
     int isLoad[WIDTH_NUM][HEIGHT_NUM];
     QVector<Soldier*>Soldiers;
+    QVector<Soldier*>Against_Soldiers;
 
+public slots:
+    void Begin_Fight();
+
+signals:
 
 private:
     Ui::MainWindow *ui;
     bool Click_Unit=false;
     bool is_PrintBlock=false;
     int num_inControl=-1;
+    int Fight_State=0;
 };
 #endif // MAINWINDOW_H

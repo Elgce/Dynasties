@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QPainter>
-#include "Const.h"
-#include <QDebug>
+
 #include "Heads.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -18,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     Init_Soldiers();
     eventId1=startTimer(50);
 
+    connect(ui->StartBtn,SIGNAL(clicked()),this,SLOT(Begin_Fight()));
 
 }
 
@@ -37,7 +36,15 @@ void MainWindow::paintEvent(QPaintEvent *event)
     if(Soldiers.size()>0)
     for (int i=0;i<Soldiers.size();i++)
     {
-        painter.drawImage(Soldiers[i]->Get_Loc().x,Soldiers[i]->Get_Loc().y,Soldiers[i]->Img,PIC_WIDTH*(Soldiers[i]->Pic_State+Soldiers[i]->Get_Stand()*Soldiers[i]->Get_Picmax()+1),PIC_HEIGHT*Soldiers[i]->Get_Type(),PIC_HEIGHT,PIC_WIDTH);
+        painter.drawImage(Soldiers[i]->Get_Loc().x,Soldiers[i]->Get_Loc().y,Soldiers[i]->Img,PIC_WIDTH*(Soldiers[i]->Pic_State),PIC_HEIGHT*Soldiers[i]->Get_Type(),PIC_HEIGHT,PIC_WIDTH);
+    }
+
+    if(Against_Soldiers.size()>0)
+    {
+        for (int i=0;i<Against_Soldiers.size();i++)
+        {
+            painter.drawImage(Against_Soldiers[i]->Get_Loc().x,Against_Soldiers[i]->Get_Loc().y,Against_Soldiers[i]->Img,PIC_WIDTH*(Against_Soldiers[i]->Pic_State+Against_Soldiers[i]->Get_Picmax()+1),PIC_HEIGHT*Against_Soldiers[i]->Get_Type(),PIC_HEIGHT,PIC_WIDTH);
+        }
     }
 
     //draw all of the clor_blocks
@@ -65,6 +72,22 @@ void MainWindow::timerEvent(QTimerEvent * ev)
         {
             Soldiers[i]->Pic_State++;
             Soldiers[i]->Pic_State%=Soldiers[i]->Get_Picmax();
+        }
+        for (int i=0;i<Against_Soldiers.size();i++)
+        {
+            Against_Soldiers[i]->Pic_State++;
+            Against_Soldiers[i]->Pic_State%=Against_Soldiers[i]->Get_Picmax();
+        }
+    }
+    if (Fight_State==1)
+    {
+        for (int i=0;i<Soldiers.size();i++)
+        {
+            Soldiers[i]->Change_Loc(Soldiers[i]->Get_Loc().x+Soldiers[i]->Get_Spd().v_x,Soldiers[i]->Get_Loc().y+Soldiers[i]->Get_Spd().v_y);
+        }
+        for (int i=0;i<Against_Soldiers.size();i++)
+        {
+            Against_Soldiers[i]->Change_Loc(Against_Soldiers[i]->Get_Loc().x+Against_Soldiers[i]->Get_Spd().v_x,Against_Soldiers[i]->Get_Loc().y+Against_Soldiers[i]->Get_Spd().v_y);
         }
     }
     repaint();
@@ -103,23 +126,21 @@ void MainWindow::Init_Soldiers()
         {
             if(isLoad[i][j]!=0)
             {
-                if(i%5==0 && j%5==0)
+                if((i<=6 && j>=8 && j<=11))
                 {
                     Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,5));
                     isLoad[i][j]=2*isLoad[i][j];
-                }
-                if(Soldiers.size()>0)
-                {
                     Soldiers[Soldiers.size()-1]->Pic_State=0;
-                    if(isLoad[i][j]==2)
-                    {
-                        Soldiers[Soldiers.size()-1]->Set_TySt(j,0);
-                    }
-                    else if(isLoad[i][j]==-2)
-                    {
-                        Soldiers[Soldiers.size()-1]->Set_TySt(j,1);
-                    }
+                    Soldiers[Soldiers.size()-1]->Set_TySt(j,0);
                 }
+                else if (i>15 && j%3==0 && i%3==0)
+                {
+                    Against_Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,5));
+                    isLoad[i][j]=2*isLoad[i][j];
+                    Against_Soldiers[Against_Soldiers.size()-1]->Pic_State=0;
+                    Against_Soldiers[Against_Soldiers.size()-1]->Set_TySt(j,1);
+                }
+
 
             }
         }
@@ -165,4 +186,29 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         }
 
     }
+}
+
+double MainWindow::Sol_Dir(Soldier *_a, Soldier *_b)
+{
+    double d_x=(double)(_a->Get_Loc().x-_b->Get_Loc().x);
+    double d_y=(double)(_a->Get_Loc().y-_b->Get_Loc().y);
+    double distance=(double)(sqrt(d_x*d_x+d_y*d_y));
+    return distance;
+}
+
+
+void MainWindow::Begin_Fight()
+{
+
+
+    for(int i=0;i<Soldiers.size();i++)
+    {
+        Soldiers[i]->Change_Speed(1,0);
+    }
+    for (int i=0;i<Against_Soldiers.size();i++)
+    {
+        Against_Soldiers[i]->Change_Speed(-1,0);
+    }
+    Fight_State=1;
+
 }

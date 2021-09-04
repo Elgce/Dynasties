@@ -7,6 +7,7 @@ Unit::Unit(int _x,int _y,int _blood,int _attack,int _picmax)
     Blood=_blood;
     Attack=_attack;
     Pic_Max=_picmax;
+
 }
 
 Location Unit::Get_Loc() const
@@ -93,3 +94,4 @@ void Unit::Convert_Tranparent()
         mybits++;
     }
 }
+

@@ -12,5 +12,8 @@
 #include <Const.h>
 #include <QMouseEvent>
 #include <QMainWindow>
+#include <QDebug>
+#include <QPainter>
+#include <QPushButton>
 
 #endif // HEADS_H
