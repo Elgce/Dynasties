@@ -28,4 +28,14 @@ int Soldier::Get_Type() const
     return Type;
 }
 
+void Soldier::to_Act()
+{
+    is_Action=true;
+}
+
+void Soldier::to_Static()
+{
+    is_Action=false;
+}
+
 

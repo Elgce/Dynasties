@@ -1,13 +1,13 @@
 #include "Unit.h"
 
-Unit::Unit(int _x,int _y,int _blood,int _attack,int _picmax)
+Unit::Unit(int _x,int _y,int _blood,int _attack,int _picmax,int _speed)
 {    
     Loc.x=_x;
     Loc.y=_y;
     Blood=_blood;
     Attack=_attack;
     Pic_Max=_picmax;
-
+    Speed=_speed;
 }
 
 Location Unit::Get_Loc() const
@@ -15,9 +15,9 @@ Location Unit::Get_Loc() const
     return Loc;
 }
 
-Speed Unit::Get_Spd() const
+int Unit::Get_Speed() const
 {
-    return Spd;
+    return Speed;
 }
 
 void Unit::Change_Loc(int _x,int _y)
@@ -26,10 +26,9 @@ void Unit::Change_Loc(int _x,int _y)
     Loc.y=_y;
 }
 
-void Unit::Change_Speed(double _vx,double _vy)
+void Unit::Change_Speed(int _speed)
 {
-    Spd.v_x=_vx;
-    Spd.v_y=_vy;
+    Speed=_speed;
 }
 
 bool Unit::is_Dead() const

@@ -14,9 +14,9 @@ MainWindow::MainWindow(QWidget *parent)
     bkg_map=QPixmap(":/images/Res/bkg.png");
     Set_Bkg(bkg_map);
     Init_Soldiers();
+    Init_Blocks();
     eventId1=startTimer(50);
 
-    connect(ui->StartBtn,SIGNAL(clicked()),this,SLOT(Begin_Fight()));
 
 }
 
@@ -48,12 +48,11 @@ void MainWindow::paintEvent(QPaintEvent *event)
     }
 
     //draw all of the clor_blocks
-    if(is_PrintBlock==true)
     for (int i=0;i<WIDTH_NUM;i++)
     {
         for(int j=0;j<HEIGHT_NUM;j++)
         {
-            if (isLoad[i][j]==1)
+            if (isLoad[i][j]==1 && Clor_Block[i][j]==true)
             {
                 painter.setBrush(QBrush(QColor(152,251,152,100)));
                 painter.drawRect(i*PIC_WIDTH,j*PIC_HEIGHT,PIC_HEIGHT,PIC_WIDTH);
@@ -66,31 +65,27 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
 void MainWindow::timerEvent(QTimerEvent * ev)
 {
-    if (Window_State==0)
+    bool isRepaint=false;
+    for(int i=0;i<Soldiers.size();i++)
     {
-        for(int i=0;i<Soldiers.size();i++)
-        {
-            Soldiers[i]->Pic_State++;
-            Soldiers[i]->Pic_State%=Soldiers[i]->Get_Picmax();
-        }
-        for (int i=0;i<Against_Soldiers.size();i++)
-        {
-            Against_Soldiers[i]->Pic_State++;
-            Against_Soldiers[i]->Pic_State%=Against_Soldiers[i]->Get_Picmax();
-        }
+
+        isRepaint=true;
+        Soldiers[i]->Pic_State++;
+        Soldiers[i]->Pic_State%=Soldiers[i]->Get_Picmax();
+
     }
-    if (Fight_State==1)
+    for (int i=0;i<Against_Soldiers.size();i++)
     {
-        for (int i=0;i<Soldiers.size();i++)
-        {
-            Soldiers[i]->Change_Loc(Soldiers[i]->Get_Loc().x+Soldiers[i]->Get_Spd().v_x,Soldiers[i]->Get_Loc().y+Soldiers[i]->Get_Spd().v_y);
-        }
-        for (int i=0;i<Against_Soldiers.size();i++)
-        {
-            Against_Soldiers[i]->Change_Loc(Against_Soldiers[i]->Get_Loc().x+Against_Soldiers[i]->Get_Spd().v_x,Against_Soldiers[i]->Get_Loc().y+Against_Soldiers[i]->Get_Spd().v_y);
-        }
+        isRepaint=true;
+        Against_Soldiers[i]->Pic_State++;
+        Against_Soldiers[i]->Pic_State%=Against_Soldiers[i]->Get_Picmax();
     }
-    repaint();
+
+    if(isRepaint==true)
+    {
+        repaint();
+    }
+
 }
 
 
@@ -128,14 +123,14 @@ void MainWindow::Init_Soldiers()
             {
                 if((i<=6 && j>=8 && j<=11))
                 {
-                    Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,5));
+                    Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,5,5));
                     isLoad[i][j]=2*isLoad[i][j];
                     Soldiers[Soldiers.size()-1]->Pic_State=0;
                     Soldiers[Soldiers.size()-1]->Set_TySt(j,0);
                 }
                 else if (i>15 && j%3==0 && i%3==0)
                 {
-                    Against_Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,5));
+                    Against_Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,5,5));
                     isLoad[i][j]=2*isLoad[i][j];
                     Against_Soldiers[Against_Soldiers.size()-1]->Pic_State=0;
                     Against_Soldiers[Against_Soldiers.size()-1]->Set_TySt(j,1);
@@ -163,6 +158,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
             is_PrintBlock=true;
 
+
             if(Soldiers.size()>0)
             for (int i=0;i<Soldiers.size();i++)
             {
@@ -173,14 +169,22 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                     break;
                 }
             }
+            for(int i=0;i<WIDTH_NUM;i++)
+            {
+                for (int j=0;j<HEIGHT_NUM;j++)
+                {
+                    if((qAbs(i-_x)+qAbs(j-_y))<=Soldiers[num_inControl]->Get_Speed() && (i!=_x || j!=_y))
+                        Clor_Block[i][j]=true;
+                }
+            }
         }
-        else if(Click_Unit==true && isLoad[_x][_y]==1)
+        else if(Click_Unit==true && isLoad[_x][_y]==1 && Clor_Block[_x][_y]==true)
         {
             Click_Unit=false;
 
             is_PrintBlock=false;
-
-            isLoad[_x][_y]=2;
+            Init_Blocks();
+            isLoad[_x][_y]=3;
             Soldiers[num_inControl]->Change_Loc(_x*PIC_WIDTH,_y*PIC_HEIGHT);
             num_inControl=-1;
         }
@@ -188,27 +192,15 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     }
 }
 
-double MainWindow::Sol_Dir(Soldier *_a, Soldier *_b)
+
+void MainWindow::Init_Blocks()
 {
-    double d_x=(double)(_a->Get_Loc().x-_b->Get_Loc().x);
-    double d_y=(double)(_a->Get_Loc().y-_b->Get_Loc().y);
-    double distance=(double)(sqrt(d_x*d_x+d_y*d_y));
-    return distance;
+    for (int i=0;i<WIDTH_NUM;i++)
+    {
+        for (int j=0;j<HEIGHT_NUM;j++)
+        {
+            Clor_Block[i][j]=false;
+        }
+    }
 }
 
-
-void MainWindow::Begin_Fight()
-{
-
-
-    for(int i=0;i<Soldiers.size();i++)
-    {
-        Soldiers[i]->Change_Speed(1,0);
-    }
-    for (int i=0;i<Against_Soldiers.size();i++)
-    {
-        Against_Soldiers[i]->Change_Speed(-1,0);
-    }
-    Fight_State=1;
-
-}
