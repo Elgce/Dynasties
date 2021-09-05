@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     Set_Bkg(bkg_map);
     Init_Soldiers();
     Init_Blocks();
+    Init_Cities();
     eventId1=startTimer(50);
 
 
@@ -57,6 +58,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
         }
     }
     painter.setPen(QPen(Qt::black,1));
+
+
     //draw all of the clor_blocks
     for (int i=0;i<WIDTH_NUM;i++)
     {
@@ -67,6 +70,16 @@ void MainWindow::paintEvent(QPaintEvent *event)
                 painter.setBrush(QBrush(QColor(152,251,152,100)));
                 painter.drawRect(i*PIC_WIDTH,j*PIC_HEIGHT,PIC_HEIGHT,PIC_WIDTH);
             }
+        }
+    }
+
+
+    //draw all the cities
+    if(Cities.size()>0)
+    {
+        for (int i=0;i<Cities.size();i++)
+        {
+            painter.drawImage(Cities[i]->Get_Loc().x,Cities[i]->Get_Loc().y,Cities[i]->Img,0,0,Cities[i]->Get_Len().Wid,Cities[i]->Get_Len().Hei);
         }
     }
 
@@ -112,7 +125,7 @@ void MainWindow::Init_Soldiers()
     {
         for (int j=0;j<HEIGHT_NUM;j++)
         {
-            isLoad[i][j]=0;
+            isLoad[i][j]=1;
         }
     }
 
@@ -242,4 +255,45 @@ void MainWindow::init_SoldierState(Soldier * _soldier)
     pAction_static->setText("Static");
     Soldier_State->addAction(pAction_static);
     connect(pAction_static,SIGNAL(triggered()),_soldier,SLOT(To_Static()));
+}
+
+
+void MainWindow::Init_Cities()
+{
+    for (int i=0;i<6;i++)
+    {
+        for (int j=0;j<4;j++)
+        {
+            isLoad[i][j]=3;
+        }
+    }
+    Cities.append(new City(0,0,6,4,":/images/Res/City_west.png"));
+
+    for(int i=24;i<30;i++)
+    {
+        for (int j=0;j<4;j++)
+        {
+            isLoad[i][j]=3;
+        }
+    }
+    Cities.append(new City(24,0,6,4,":/images/Res/City_east.png"));
+
+    for (int i=0;i<4;i++)
+    {
+        for (int j=17;j<20;j++)
+        {
+            isLoad[i][j]=3;
+        }
+    }
+    Cities.append(new City(0,17,4,3,":images/Res/Town_west.png"));
+
+    for (int i=26;i<30;i++)
+    {
+        for (int j=17;j<20;j++)
+        {
+            isLoad[i][j]=3;
+        }
+    }
+    Cities.append(new City(26,17,4,3,":images/Res/Town_east.png"));
+
 }

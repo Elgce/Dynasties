@@ -9,4 +9,9 @@ struct Location
 };
 
 
+struct Len
+{
+    int Wid;int Hei;
+};
+
 #endif // STRUCT_USE_H

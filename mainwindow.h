@@ -25,12 +25,12 @@ public:
 
     int eventId1;
     int Window_State=0;
-    int isLoad[WIDTH_NUM][HEIGHT_NUM];
+    int isLoad[WIDTH_NUM][HEIGHT_NUM];//0:wait for use; 1:can reach; 2:my_soldiers; -2:against_soldiers; 3:cities
     bool Clor_Block[WIDTH_NUM][HEIGHT_NUM];
     QVector<Soldier*>Soldiers;
     QVector<Soldier*>Against_Soldiers;
-
-
+    QVector<City*>Cities;
+    void Init_Cities();
     void Init_Blocks();
 public slots:
 

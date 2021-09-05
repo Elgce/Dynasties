@@ -18,5 +18,6 @@
 #include <QtMath>
 #include <QMenu>
 #include <QAction>
+#include "City.h"
 
 #endif // HEADS_H

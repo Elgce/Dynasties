@@ -3,5 +3,10 @@
         <file>Res/Blue.bmp</file>
         <file>Res/Red.bmp</file>
         <file>Res/bkg.png</file>
+        <file>Res/City_east.png</file>
+        <file>Res/City_north.png</file>
+        <file>Res/City_west.png</file>
+        <file>Res/Town_east.png</file>
+        <file>Res/Town_west.png</file>
     </qresource>
 </RCC>
