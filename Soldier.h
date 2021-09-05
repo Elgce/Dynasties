@@ -21,7 +21,7 @@ public:
     int Pic_State;
 public slots:
     void To_Attack();
-    void To_Satic();
+    void To_Static();
     void To_Defense();
 
 signals:

@@ -83,6 +83,15 @@ void MainWindow::paintEvent(QPaintEvent *event)
         }
     }
 
+    //draw all the barriers
+    if(Barriers.size()>0)
+    {
+        for(int i=0;i<Barriers.size();i++)
+        {
+            painter.drawImage(Barriers[i]->Get_Loc().x,Barriers[i]->Get_Loc().y,Barriers[i]->Img,0,0,Barriers[i]->Get_Len().Wid,Barriers[i]->Get_Len().Hei);
+        }
+    }
+
 }
 
 
@@ -174,7 +183,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     {
         int _x=event->x()/PIC_WIDTH;
         int _y=event->y()/PIC_HEIGHT;
-        if(Click_Unit==false && isLoad[_x][_y]==2)
+        if(Click_Unit==false && isLoad[_x][_y]==2 && Set_Barrier==0)
         {
             if(Soldiers.size()>0)
             {
@@ -225,6 +234,15 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             num_inControl=-1;
         }
 
+
+        if(Set_Barrier!=0 && Clor_Block[_x][_y]==true && Click_Unit==false)
+        {
+            Barriers.append(new Barrier(_x,_y,1,1,Set_Barrier));
+            Init_Blocks();
+            is_PrintBlock=false;
+            isLoad[_x][_y]=3+Set_Barrier;
+            Set_Barrier=0;
+        }
     }
 }
 
@@ -295,5 +313,55 @@ void MainWindow::Init_Cities()
         }
     }
     Cities.append(new City(26,17,4,3,":images/Res/Town_east.png"));
-
 }
+
+
+
+
+
+
+
+void MainWindow::on_actionMount_triggered()
+{
+    Set_Barrier=1;
+    is_PrintBlock=true;
+    for (int i=0;i<WIDTH_NUM;i++)
+    {
+        for (int j=0;j<HEIGHT_NUM;j++)
+        {
+            if(isLoad[i][j]==1)
+            Clor_Block[i][j]=true;
+        }
+    }
+}
+
+
+void MainWindow::on_actionFire_triggered()
+{
+    Set_Barrier=2;
+    is_PrintBlock=true;
+    for (int i=0;i<WIDTH_NUM;i++)
+    {
+        for (int j=0;j<HEIGHT_NUM;j++)
+        {
+            if(isLoad[i][j]==1)
+            Clor_Block[i][j]=true;
+        }
+    }
+}
+
+
+void MainWindow::on_actionWater_triggered()
+{
+    Set_Barrier=3;
+    is_PrintBlock=true;
+    for (int i=0;i<WIDTH_NUM;i++)
+    {
+        for (int j=0;j<HEIGHT_NUM;j++)
+        {
+            if(isLoad[i][j]==1)
+            Clor_Block[i][j]=true;
+        }
+    }
+}
+

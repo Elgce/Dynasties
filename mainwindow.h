@@ -30,15 +30,26 @@ public:
     QVector<Soldier*>Soldiers;
     QVector<Soldier*>Against_Soldiers;
     QVector<City*>Cities;
+    QVector<Barrier*>Barriers;
     void Init_Cities();
     void Init_Blocks();
 public slots:
 
 signals:
 
+private slots:
+
+
+    void on_actionMount_triggered();
+
+    void on_actionFire_triggered();
+
+    void on_actionWater_triggered();
+
 private:
     Ui::MainWindow *ui;
     bool Click_Unit=false;
+    int Set_Barrier=0;// 0: not start   1: mount  2: fire  3: water
     bool is_PrintBlock=false;
     int num_inControl=-1;
     QMenu * Soldier_State;

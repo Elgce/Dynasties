@@ -8,5 +8,9 @@
         <file>Res/City_west.png</file>
         <file>Res/Town_east.png</file>
         <file>Res/Town_west.png</file>
+        <file>Res/Barriers.png</file>
+        <file>Res/fire.png</file>
+        <file>Res/mount.png</file>
+        <file>Res/water.png</file>
     </qresource>
 </RCC>

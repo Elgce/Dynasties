@@ -19,5 +19,6 @@
 #include <QMenu>
 #include <QAction>
 #include "City.h"
+#include "Barrier.h"
 
 #endif // HEADS_H

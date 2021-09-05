@@ -67,7 +67,7 @@ void Soldier::To_Defense()
     Set_TySt(3,Stand);
 }
 
-void Soldier::To_Satic()
+void Soldier::To_Static()
 {
-
+    Set_TySt(4,Stand);
 }
