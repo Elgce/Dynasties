@@ -20,5 +20,6 @@
 #include <QAction>
 #include "City.h"
 #include "Barrier.h"
+#include <QSound>
 
 #endif // HEADS_H

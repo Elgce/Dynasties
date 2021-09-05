@@ -13,4 +13,7 @@
         <file>Res/mount.png</file>
         <file>Res/water.png</file>
     </qresource>
+    <qresource prefix="/Music">
+        <file>Music/bkm.wav</file>
+    </qresource>
 </RCC>

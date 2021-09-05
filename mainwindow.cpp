@@ -8,7 +8,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-
+    bkm=new QSound(":/Music/Music/bkm.wav");
+    bkm->play();
+    bkm->setLoops(-1);
 
     resize(960,640);
     bkg_map=QPixmap(":/images/Res/bkg.png");
