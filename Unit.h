@@ -57,7 +57,7 @@ signals:
 
 private:
 
-    int Move_Num=4;
+    int Move_Num=2;
     Location Loc;
     int Speed;
     int Blood;

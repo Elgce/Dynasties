@@ -22,4 +22,7 @@
 #include "Barrier.h"
 #include <QSound>
 #include <QMessageBox>
+#include <QDateTime>
+#include <QtGlobal>
+
 #endif // HEADS_H

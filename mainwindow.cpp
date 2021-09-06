@@ -12,7 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
     bkm->play();
     bkm->setLoops(-1);
     atta=new QSound(":/Music/Music/atta.wav");
-
+    time=QDateTime::currentDateTime();
+    qsrand(time.toTime_t());
     resize(960,640);
     bkg_map=QPixmap(":/images/Res/bkg.png");
     Set_Bkg(bkg_map);
@@ -20,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     Init_Blocks();
     Init_Cities();
     Init_Barriers();
-    eventId1=startTimer(50);
+    eventId1=startTimer(200);
 
 
 }
@@ -35,34 +36,6 @@ MainWindow::~MainWindow()
 void MainWindow::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-
-
-    //draw all of the soldiers
-    if(Soldiers.size()>0)
-    for (int i=0;i<Soldiers.size();i++)
-    {
-        painter.drawImage(Soldiers[i]->Get_Loc().x,Soldiers[i]->Get_Loc().y,Soldiers[i]->Img,PIC_WIDTH*(Soldiers[i]->Pic_State),PIC_HEIGHT*Soldiers[i]->Get_Line(),PIC_HEIGHT,PIC_WIDTH);
-        painter.setPen(QPen(Qt::white,2));
-        painter.drawLine(Soldiers[i]->Get_Loc().x+4,Soldiers[i]->Get_Loc().y-8,Soldiers[i]->Get_Loc().x+20,Soldiers[i]->Get_Loc().y-8);
-        painter.setPen(QPen(Qt::red,1));
-        painter.drawLine(Soldiers[i]->Get_Loc().x+4,Soldiers[i]->Get_Loc().y-8,Soldiers[i]->Get_Loc().x+20*(double((double)Soldiers[i]->Get_Blood()/100.0)),Soldiers[i]->Get_Loc().y-8);
-
-    }
-
-    if(Against_Soldiers.size()>0)
-    {
-        for (int i=0;i<Against_Soldiers.size();i++)
-        {
-            painter.drawImage(Against_Soldiers[i]->Get_Loc().x,Against_Soldiers[i]->Get_Loc().y,Against_Soldiers[i]->Img,PIC_WIDTH*(Against_Soldiers[i]->Pic_State),PIC_HEIGHT*Against_Soldiers[i]->Get_Line(),PIC_HEIGHT,PIC_WIDTH);
-
-            painter.setPen(QPen(Qt::white,2));
-            painter.drawLine(Against_Soldiers[i]->Get_Loc().x+4,Against_Soldiers[i]->Get_Loc().y-8,Against_Soldiers[i]->Get_Loc().x+20,Against_Soldiers[i]->Get_Loc().y-8);
-            painter.setPen(QPen(Qt::red,1));
-            painter.drawLine(Against_Soldiers[i]->Get_Loc().x+4,Against_Soldiers[i]->Get_Loc().y-8,Against_Soldiers[i]->Get_Loc().x+20*(double((double)Against_Soldiers[i]->Get_Blood()/100.0)),Against_Soldiers[i]->Get_Loc().y-8);
-        }
-    }
-    painter.setPen(QPen(Qt::black,1));
-
 
     //draw all of the clor_blocks
     for (int i=0;i<WIDTH_NUM;i++)
@@ -95,6 +68,35 @@ void MainWindow::paintEvent(QPaintEvent *event)
             painter.drawImage(Barriers[i]->Get_Loc().x,Barriers[i]->Get_Loc().y,Barriers[i]->Img,0,0,Barriers[i]->Get_Len().Wid,Barriers[i]->Get_Len().Hei);
         }
     }
+
+    //draw all of the soldiers
+    if(Soldiers.size()>0)
+    for (int i=0;i<Soldiers.size();i++)
+    {
+        painter.drawImage(Soldiers[i]->Get_Loc().x,Soldiers[i]->Get_Loc().y,Soldiers[i]->Img,PIC_WIDTH*(Soldiers[i]->Pic_State),PIC_HEIGHT*Soldiers[i]->Get_Line(),PIC_HEIGHT,PIC_WIDTH);
+        painter.setPen(QPen(Qt::white,2));
+        painter.drawLine(Soldiers[i]->Get_Loc().x+4,Soldiers[i]->Get_Loc().y-8,Soldiers[i]->Get_Loc().x+20,Soldiers[i]->Get_Loc().y-8);
+        painter.setPen(QPen(Qt::red,1));
+        painter.drawLine(Soldiers[i]->Get_Loc().x+4,Soldiers[i]->Get_Loc().y-8,Soldiers[i]->Get_Loc().x+20*(double((double)Soldiers[i]->Get_Blood()/100.0)),Soldiers[i]->Get_Loc().y-8);
+
+    }
+
+    if(Against_Soldiers.size()>0)
+    {
+        for (int i=0;i<Against_Soldiers.size();i++)
+        {
+            painter.drawImage(Against_Soldiers[i]->Get_Loc().x,Against_Soldiers[i]->Get_Loc().y,Against_Soldiers[i]->Img,PIC_WIDTH*(Against_Soldiers[i]->Pic_State),PIC_HEIGHT*Against_Soldiers[i]->Get_Line(),PIC_HEIGHT,PIC_WIDTH);
+
+            painter.setPen(QPen(Qt::white,2));
+            painter.drawLine(Against_Soldiers[i]->Get_Loc().x+4,Against_Soldiers[i]->Get_Loc().y-8,Against_Soldiers[i]->Get_Loc().x+20,Against_Soldiers[i]->Get_Loc().y-8);
+            painter.setPen(QPen(Qt::red,1));
+            painter.drawLine(Against_Soldiers[i]->Get_Loc().x+4,Against_Soldiers[i]->Get_Loc().y-8,Against_Soldiers[i]->Get_Loc().x+20*(double((double)Against_Soldiers[i]->Get_Blood()/100.0)),Against_Soldiers[i]->Get_Loc().y-8);
+        }
+    }
+    painter.setPen(QPen(Qt::black,1));
+
+
+
 
 }
 
@@ -412,6 +414,16 @@ void MainWindow::Init_Cities()
     }
     Cities.append(new City(24,0,6,4,":/images/Res/City_east.png"));
 
+    for (int i=12;i<18;i++)
+    {
+        for (int j=0;j<4;j++)
+        {
+            isLoad[i][j]=3;
+        }
+    }
+    Cities.append(new City(12,0,18,4,":/images/Res/City_north.png"));
+
+
     for (int i=0;i<4;i++)
     {
         for (int j=17;j<20;j++)
@@ -420,6 +432,7 @@ void MainWindow::Init_Cities()
         }
     }
     Cities.append(new City(0,17,4,3,":images/Res/Town_west.png"));
+
 
     for (int i=26;i<30;i++)
     {
@@ -490,8 +503,20 @@ void MainWindow::on_actionWater_triggered()
     }
 }
 
-
 void MainWindow::Init_Barriers()
 {
+    for (int i=0;i<20;i++)
+    {
+        int b_x=qrand() % 30;
+        int b_y=qrand() % 19+1;
+        int type=qrand() % 3+1;
+        if(isLoad[b_x][b_y]==1)
+        {
+            Barriers.append(new Barrier(b_x,b_y,1,1,type));
+            Init_Blocks();
+            is_PrintBlock=false;
+            isLoad[b_x][b_y]=3+type;
+        }
+    }
 
 }

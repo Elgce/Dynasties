@@ -1,7 +1,6 @@
 #include "Barrier.h"
 Barrier::Barrier(int _x,int _y,int _wid,int _hei,int _vary)
 {
-
     Loc.x=_x*PIC_WIDTH;
     Loc.y=_y*PIC_HEIGHT;
     Len.Hei=_hei*PIC_HEIGHT;
@@ -18,9 +17,7 @@ Barrier::Barrier(int _x,int _y,int _wid,int _hei,int _vary)
     {
         Path=":/images/Res/water.png";
     }
-
     Img.load(Path);
-
 }
 
 Len Barrier::Get_Len()
