@@ -21,5 +21,5 @@
 #include "City.h"
 #include "Barrier.h"
 #include <QSound>
-
+#include <QMessageBox>
 #endif // HEADS_H

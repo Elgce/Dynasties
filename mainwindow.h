@@ -25,6 +25,10 @@ public:
     QPixmap bkg_map;
     QSound * bkm;
     QSound * atta;
+    int Mine_Sol_x[10]={13,12,11,10,9,10,9,10,11,12};
+    int Mine_Sol_y[10]={10,9,8,8,9,10,11,12,12,11};
+    int Ag_Sol_x[9]={17,18,19,20,21,20,19,18,19};
+    int Ag_Sol_y[9]={10,9,8,9,10,11,12,11,10};
     int eventId1;
     int Window_State=0;
     int isLoad[WIDTH_NUM][HEIGHT_NUM];//0:wait for use; 1:can reach; 2:my_soldiers; -2:against_soldiers; 3:cities

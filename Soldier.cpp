@@ -11,6 +11,12 @@ void Soldier::Set_TySt(int _type, int _stand)
         Img.load(Path);
 
     }
+    else if(Type==2)
+    {
+        Path=":/images/Res/zhaoyun.png";
+        Attack_Path=":/images/Res/zhaoyun_attack.jpg";
+        Img.load(Path);
+    }
     Convert_Tranparent();
     Line=Stand;
 
@@ -61,7 +67,9 @@ void Soldier::To_Static()
     Convert_Tranparent();
     Pic_State=0;
     State=0;
-    Line=2;
+    if(Stand==2)
+        Line=2;
+    else Line=1;
     is_Action=false;
     Set_Armor(0.2);
     Set_Attack(50);

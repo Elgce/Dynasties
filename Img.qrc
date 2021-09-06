@@ -14,6 +14,8 @@
         <file>Res/water.png</file>
         <file>Res/guanyu_attack.jpg</file>
         <file>Res/guanyu.jpg</file>
+        <file>Res/zhaoyun.png</file>
+        <file>Res/zhaoyun_attack.jpg</file>
     </qresource>
     <qresource prefix="/Music">
         <file>Music/bkm.wav</file>
