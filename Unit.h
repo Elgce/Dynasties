@@ -33,7 +33,7 @@ public:
     bool is_OnMove=false;
 public:
     QImage Img;
-
+    QImage Img_Attack;
 
 
 public slots:

@@ -80,17 +80,17 @@ void Unit::Dam_Blood(int _blood)
 void Unit::Convert_Tranparent()
 {
     Img=Img.convertToFormat(QImage::Format_ARGB32);
-    union myrgb
+    for (int i=0;i<Img.width();i++)
     {
-        uint rgba;
-        uchar rgba_bits[4];
-    };
-    myrgb * mybits=(myrgb*) Img.bits();
-    int len=Img.width()*Img.height();
-    while(len-->0)
-    {
-        mybits->rgba_bits[3]=(mybits->rgba==0xFFFFFFFF)?0:255;
-        mybits++;
+        for (int j=0;j<Img.height();j++)
+        {
+            QColor pixelColor=Img.pixelColor(i,j);
+            if(pixelColor.red()>240 && pixelColor.green()>240 && pixelColor.blue()>240)
+            {
+                pixelColor.setAlpha(0);
+                Img.setPixelColor(i,j,pixelColor);
+            }
+        }
     }
 }
 

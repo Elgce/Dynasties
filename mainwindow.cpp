@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     Init_Soldiers();
     Init_Blocks();
     Init_Cities();
-    eventId1=startTimer(50);
+    eventId1=startTimer(100);
 
 
 }
@@ -180,10 +180,10 @@ void MainWindow::Init_Soldiers()
             {
                 if((i<=6 && j>=8 && j<=11))
                 {
-                    Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,5,10));
+                    Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,4,10));
                     isLoad[i][j]=2*isLoad[i][j];
                     Soldiers[Soldiers.size()-1]->Pic_State=0;
-                    Soldiers[Soldiers.size()-1]->Set_TySt(j,0);
+                    Soldiers[Soldiers.size()-1]->Set_TySt(2,0);
                 }
                 else if (i>15 && j%3==0 && i%3==0)
                 {

@@ -7,25 +7,11 @@ void Soldier::Set_TySt(int _type, int _stand)
     Stand=_stand % 2;
 
 
-    if (Type==3)
-    {
-        Set_Armor(40);
-        Set_Attack(0);
-    }
-    else if(Type==4)
-    {
-        Set_Attack(30);
-        Set_Armor(30);
-    }
-    else
-    {
-        Set_Attack(50);
-    }
-
 
     if(Stand==0)
     {
-        Img.load(":/images/Res/Blue.bmp");
+        Img.load(":/images/Res/guanyu_attack.jpg");
+        Img_Attack.load(":/images/Res/guanyu_attack.jpg");
     }
     else
     {

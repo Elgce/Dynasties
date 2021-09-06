@@ -15,6 +15,7 @@ public:
     int Get_Type() const;
     int Get_Stand() const;
     void Set_TySt(int,int);
+    bool Get_State() const;
     void to_Act();
     void to_Static();
 public:
