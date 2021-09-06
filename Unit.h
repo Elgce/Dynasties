@@ -30,6 +30,7 @@ public:
     int Time_Moved=0;
     void Set_Attack(int);
     void Set_Armor(int);
+    bool is_OnMove=false;
 public:
     QImage Img;
 

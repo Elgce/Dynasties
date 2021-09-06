@@ -31,6 +31,8 @@ public:
     QVector<Soldier*>Against_Soldiers;
     QVector<City*>Cities;
     QVector<Barrier*>Barriers;
+    Location Aim;
+    bool Soldier_OnMove=false;
     void Init_Cities();
     void Init_Blocks();
 public slots:
@@ -53,5 +55,6 @@ private:
     bool is_PrintBlock=false;
     int num_inControl=-1;
     QMenu * Soldier_State;
+    QPoint Pos;
 };
 #endif // MAINWINDOW_H

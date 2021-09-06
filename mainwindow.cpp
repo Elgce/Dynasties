@@ -106,6 +106,29 @@ void MainWindow::timerEvent(QTimerEvent * ev)
         isRepaint=true;
         Soldiers[i]->Pic_State++;
         Soldiers[i]->Pic_State%=Soldiers[i]->Get_Picmax();
+        if(Soldiers[i]->is_OnMove==true)
+        {
+            if(Soldiers[i]->Get_Loc().x>=(Aim.x-16) && Soldiers[i]->Get_Loc().y>=(Aim.y-16)
+                    && Soldiers[i]->Get_Loc().x<=(Aim.x+16) && Soldiers[i]->Get_Loc().y>=Aim.y-16)
+            {
+                Soldiers[i]->Change_Loc(Aim.x,Aim.y);
+                Aim.x=0;Aim.y=0;
+                init_SoldierState(Soldiers[i]);
+                Soldier_State->popup(Pos);
+                Soldiers[i]->is_OnMove=false;
+                Soldier_OnMove=false;
+            }
+            else
+            {
+                int dx=Aim.x-Soldiers[i]->Get_Loc().x;
+                int dy=Aim.y-Soldiers[i]->Get_Loc().y;
+                double dir=sqrt(dx*dx+dy+dy);
+                int vx=(int)(Soldiers[i]->Get_Speed()*(dx/dir));
+                int vy=(int)(Soldiers[i]->Get_Speed()*(dy/dir));
+                Soldiers[i]->Change_Loc(Soldiers[i]->Get_Loc().x+vx,Soldiers[i]->Get_Loc().y+vy);
+
+            }
+        }
 
     }
     for (int i=0;i<Against_Soldiers.size();i++)
@@ -157,14 +180,14 @@ void MainWindow::Init_Soldiers()
             {
                 if((i<=6 && j>=8 && j<=11))
                 {
-                    Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,5,5));
+                    Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,5,10));
                     isLoad[i][j]=2*isLoad[i][j];
                     Soldiers[Soldiers.size()-1]->Pic_State=0;
                     Soldiers[Soldiers.size()-1]->Set_TySt(j,0);
                 }
                 else if (i>15 && j%3==0 && i%3==0)
                 {
-                    Against_Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,5,5));
+                    Against_Soldiers.append(new Soldier(PIC_WIDTH*i,PIC_HEIGHT*j,100,100,5,10));
                     isLoad[i][j]=2*isLoad[i][j];
                     Against_Soldiers[Against_Soldiers.size()-1]->Pic_State=0;
                     Against_Soldiers[Against_Soldiers.size()-1]->Set_TySt(j,1);
@@ -185,7 +208,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     {
         int _x=event->x()/PIC_WIDTH;
         int _y=event->y()/PIC_HEIGHT;
-        if(Click_Unit==false && isLoad[_x][_y]==2 && Set_Barrier==0)
+        if(Click_Unit==false && isLoad[_x][_y]==2 && Set_Barrier==0 && Soldier_OnMove==false)
         {
             if(Soldiers.size()>0)
             {
@@ -225,19 +248,19 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         else if(Click_Unit==true && isLoad[_x][_y]==1 && Clor_Block[_x][_y]==true)
         {
             Click_Unit=false;
-
             is_PrintBlock=false;
-            init_SoldierState(Soldiers[num_inControl]);
-            Soldier_State->popup(event->globalPos());
+            Aim.x=_x*PIC_WIDTH;Aim.y=_y*PIC_HEIGHT;
+            Soldiers[num_inControl]->is_OnMove=true;
+            Pos=event->globalPos();
             Init_Blocks();
             isLoad[_x][_y]=2;
-            Soldiers[num_inControl]->Change_Loc(_x*PIC_WIDTH,_y*PIC_HEIGHT);
             Soldiers[num_inControl]->Time_Moved++;
             num_inControl=-1;
+
         }
 
 
-        if(Set_Barrier!=0 && Clor_Block[_x][_y]==true && Click_Unit==false)
+        if(Set_Barrier!=0 && Clor_Block[_x][_y]==true && Click_Unit==false && Soldier_OnMove==false)
         {
             Barriers.append(new Barrier(_x,_y,1,1,Set_Barrier));
             Init_Blocks();
