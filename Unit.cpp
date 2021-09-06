@@ -43,12 +43,12 @@ int Unit::Get_Blood() const
     return Blood;
 }
 
-void Unit::Add_Blood(int _new)
+void Unit::Kill_Blood(int _new)
 {
-    Blood+=_new;
+    Blood-=_new;
 }
 
-void Unit::Add_Armor(int _new)
+void Unit::Add_Armor(double _new)
 {
     Armor+=_new;
 }
@@ -105,9 +105,18 @@ void Unit::Set_Attack(int _attack)
     Attack=_attack;
 }
 
-void Unit::Set_Armor(int _armor)
+void Unit::Set_Armor(double _armor)
 {
     Armor=_armor;
 }
 
+int Unit::Get_Attack() const
+{
+    return Attack;
+}
+
+double Unit::Get_Armor() const
+{
+    return Armor;
+}
 

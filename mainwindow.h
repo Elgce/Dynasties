@@ -20,9 +20,11 @@ public:
     void Set_Bkg(QPixmap);
     void Init_Soldiers();
     void mousePressEvent(QMouseEvent* event);
-    void init_SoldierState(Soldier *);
+    void Init_SoldierState(Soldier *);
+    void Init_Barriers();
     QPixmap bkg_map;
     QSound * bkm;
+    QSound * atta;
     int eventId1;
     int Window_State=0;
     int isLoad[WIDTH_NUM][HEIGHT_NUM];//0:wait for use; 1:can reach; 2:my_soldiers; -2:against_soldiers; 3:cities

@@ -14,10 +14,11 @@ public:
 public:
     int Get_Type() const;
     int Get_Stand() const;
+    int Get_Line() const;
     void Set_TySt(int,int);
     bool Get_State() const;
-    void to_Act();
-    void to_Static();
+    void Set_Line(int);
+    bool is_Action=false;
 public:
     int Pic_State;
 public slots:
@@ -28,10 +29,14 @@ public slots:
 signals:
 
 private:
-    int Type;
-    int Stand;
+    //Type: the kind of Soldier  Stand: turn right or turn left  State: attack/defense/static  Line: the line pic to show
+    int Type;//3: static/ahead  2: back  3:1: guanyu  2:  zhaoyun  3: soldier1  4:
+    int Stand;//1:against   2:mine
+    int State;//attack static defense
+    int Line;//the line to show
     QString Path;
-    bool is_Action=false;
+    QString Attack_Path;
+
 };
 
 #endif // SOLDIER_H

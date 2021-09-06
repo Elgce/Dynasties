@@ -29,18 +29,20 @@ public:
     int Get_Movemax() const;
     int Time_Moved=0;
     void Set_Attack(int);
-    void Set_Armor(int);
+    void Set_Armor(double);
     bool is_OnMove=false;
+    double Get_Armor() const;
+    int Get_Attack() const;
+    void Kill_Blood(int);
 public:
     QImage Img;
-    QImage Img_Attack;
 
 
 public slots:
-    void Add_Blood(int);
 
 
-    void Add_Armor(int);
+
+    void Add_Armor(double);
     void Change_Num(int);
     void Dam_Blood(int);
 
@@ -59,8 +61,8 @@ private:
     Location Loc;
     int Speed;
     int Blood;
-    int Attack;
-    int Armor=20;
+    int Attack=50;
+    double Armor=0.4;
     int Pic_Num=0;
     int Pic_Max;
     QString Pic_Path="";

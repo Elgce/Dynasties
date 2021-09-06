@@ -1,24 +1,19 @@
 #include <Soldier.h>
-
+#include <QSound>
 
 void Soldier::Set_TySt(int _type, int _stand)
 {
-    Type=_type % 5;
-    Stand=_stand % 2;
-
-
-
-    if(Stand==0)
+    Type=_type;Stand=_stand;
+    if(Type==1)
     {
-        Img.load(":/images/Res/guanyu_attack.jpg");
-        Img_Attack.load(":/images/Res/guanyu_attack.jpg");
-    }
-    else
-    {
-        Img.load(":/images/Res/Red.bmp");
+        Path=":/images/Res/guanyu.jpg";
+        Attack_Path=":/images/Res/guanyu_attack.jpg";
+        Img.load(Path);
 
     }
     Convert_Tranparent();
+    Line=Stand;
+
 
 }
 
@@ -33,27 +28,46 @@ int Soldier::Get_Type() const
     return Type;
 }
 
-void Soldier::to_Act()
+void Soldier::Set_Line(int _line)
 {
-    is_Action=true;
-}
 
-void Soldier::to_Static()
-{
-    is_Action=false;
+    Line=_line;
 }
 
 void Soldier::To_Attack()
 {
-    Set_TySt(0,Stand);
+    State=1;
+    Pic_State=0;
+    is_Action=true;
+    Img.load(Attack_Path);
+    Convert_Tranparent();
+    Line=2;
+    Set_Attack(70);
 }
 
 void Soldier::To_Defense()
 {
-    Set_TySt(3,Stand);
+    Img.load(Path);
+    Convert_Tranparent();
+    Pic_State=0;
+    State=2;
+    Line=0;
+    Set_Armor(0.4);
 }
 
 void Soldier::To_Static()
 {
-    Set_TySt(4,Stand);
+    Img.load(Path);
+    Convert_Tranparent();
+    Pic_State=0;
+    State=0;
+    Line=2;
+    is_Action=false;
+    Set_Armor(0.2);
+    Set_Attack(50);
+}
+
+int Soldier::Get_Line() const
+{
+    return Line;
 }
