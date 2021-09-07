@@ -41,6 +41,7 @@ public:
     QVector<City*>Cities;
     QVector<Barrier*>Barriers;
     Location Aim;
+    void Set_MenuStyle(QMenu *);
     bool Soldier_OnMove=false;
     void Init_Cities();
     void Init_Blocks();

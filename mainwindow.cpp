@@ -504,9 +504,37 @@ void MainWindow::Init_Blocks()
     }
 }
 
+void MainWindow::Set_MenuStyle(QMenu * _menu)
+{
+    _menu->setStyleSheet(
+                "\
+                QMenu {\
+                background-color:rgb(89,87,87);\
+                border:3px solid rgb(189,183,107);\
+                }\
+                QMenu::item{\
+                font-size:10pt;\
+                color: rgb(178,34,34);\
+                border:3px solid rgb(240,230,140);\
+                background-color:rgb(189,183,107);\
+                padding:5px 5px;\
+                margin:2px 2px;\
+                }\
+                QMenu::item:selected{\
+                background-color:rgb(255,215,0);\
+                }\
+                QMenu::item:pressed{\
+                border:1px solid rgb(60,60,61);\
+                background-color:rgb(220,80,6);\
+                }\
+                "
+                );
+}
+
 void MainWindow::Init_SoldierState(Soldier * _soldier)
 {
     Soldier_State=new QMenu(this);
+    Set_MenuStyle(Soldier_State);
     QAction *pAction_attack=new QAction(Soldier_State);
     QAction *pAction_defense=new QAction(Soldier_State);
     QAction *pAction_static=new QAction(Soldier_State);
@@ -524,6 +552,7 @@ void MainWindow::Init_SoldierState(Soldier * _soldier)
 void MainWindow::Init_SoldierDetail(Soldier * _soldier)
 {
     Soldier_Detail=new QMenu(this);
+    Set_MenuStyle(Soldier_Detail);
     QAction *pAction_blood=new QAction(Soldier_Detail);
     pAction_blood->setText("Blood:"+QString::number(_soldier->Get_Blood()));
     Soldier_Detail->addAction(pAction_blood);
