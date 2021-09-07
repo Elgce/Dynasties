@@ -14,6 +14,7 @@ SOURCES += \
     Leader.cpp \
     Soldier.cpp \
     Unit.cpp \
+    escwidget.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -26,9 +27,11 @@ HEADERS += \
     Soldier.h \
     Struct_Use.h \
     Unit.h \
+    escwidget.h \
     mainwindow.h
 
 FORMS += \
+    escwidget.ui \
     mainwindow.ui
 
 # Default rules for deployment.

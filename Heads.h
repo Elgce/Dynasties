@@ -24,5 +24,6 @@
 #include <QMessageBox>
 #include <QDateTime>
 #include <QtGlobal>
-
+#include <escwidget.h>
+#include <QRandomGenerator>
 #endif // HEADS_H

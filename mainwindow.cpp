@@ -7,22 +7,20 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+    Esc_Widget=new EscWidget;
+    connect(Esc_Widget,SIGNAL(StartBtn_Clicked()),this,SLOT(Start_Window()));
+    connect(Esc_Widget,SIGNAL(ContinueBtn_Clicked()),this,SLOT(Continue_Window()));
+    resize(960,640);
+    bkg_map=QPixmap(":/images/Res/bkg.png");
+    Set_Bkg(bkg_map);
     bkm=new QSound(":/Music/Music/bkm.wav");
     bkm->play();
     bkm->setLoops(-1);
     atta=new QSound(":/Music/Music/atta.wav");
-    time=QDateTime::currentDateTime();
-    qsrand(time.toTime_t());
-    resize(960,640);
-    bkg_map=QPixmap(":/images/Res/bkg.png");
-    Set_Bkg(bkg_map);
-    Init_Soldiers();
-    Init_Blocks();
-    Init_Cities();
-    Init_Barriers();
-    eventId1=startTimer(200);
 
+
+
+    Esc_Widget->show();
 
 }
 
@@ -32,11 +30,79 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::Continue_Window()
+{
+    Window_State=1;
+    Esc_Widget->close();
+    eventId1=startTimer(200);
+}
+
+void MainWindow::Start_Window()
+{
+
+    Window_State=1;
+    Init();
+    Esc_Widget->close();
+}
+
+void MainWindow::Init()
+{
+    num_inControl=-1;
+    Set_Barrier=0;
+    Click_Unit=false;
+    is_PrintBlock=false;
+
+    if(Soldiers.size()>0)
+    {
+        for (int i=0;i<Soldiers.size();i++)
+        {
+            delete Soldiers[i];
+
+        }
+    }
+    Soldiers.clear();
+    if(Cities.size()>0)
+    {
+        for (int i=0;i<Cities.size();i++)
+        {
+            delete Cities[i];
+
+        }
+    }
+    Cities.clear();
+    if(Barriers.size()>0)
+    {
+        for (int i=0;i<Barriers.size();i++)
+        {
+            delete Barriers[i];
+
+        }
+    }
+    Barriers.clear();
+    Init_Soldiers();
+    Init_Blocks();
+    Init_Cities();
+    Init_Barriers();
+    eventId1=startTimer(200);
+}
+
+
+
+void MainWindow::Set_WindowState(int _state)
+{
+    Window_State=_state;
+}
+
+
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
-    QPainter painter(this);
 
+    if(Window_State==0)
+    {
+        return;
+    }
+    QPainter painter(this);
     //draw all of the clor_blocks
     for (int i=0;i<WIDTH_NUM;i++)
     {
@@ -103,6 +169,10 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
 void MainWindow::timerEvent(QTimerEvent * ev)
 {
+    if(Window_State==0)
+    {
+        return;
+    }
     if(Against_Soldiers.size()==0)
     {
         QMessageBox::warning(this,"Game Over","You Win!");
@@ -291,11 +361,25 @@ void MainWindow::Init_Soldiers()
 }
 
 
-
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if(Window_State==0)
+        return;
+    if(event->key()==Qt::Key_Escape)
+    {
+        Window_State=0;
+        Esc_Widget->show();
+        killTimer(eventId1);
+    }
+}
 
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
+    if(Window_State==0)
+    {
+        return;
+    }
     if(event->button()==Qt::LeftButton)
     {
         int _x=event->x()/PIC_WIDTH;
@@ -452,6 +536,10 @@ void MainWindow::Init_Cities()
 
 void MainWindow::on_actionMount_triggered()
 {
+    if(Window_State==0)
+    {
+        return;
+    }
     if (Soldier_OnMove==false)
     {
         Set_Barrier=1;
@@ -470,6 +558,10 @@ void MainWindow::on_actionMount_triggered()
 
 void MainWindow::on_actionFire_triggered()
 {
+    if(Window_State==0)
+    {
+        return;
+    }
     if(Soldier_OnMove==false)
     {
         Set_Barrier=2;
@@ -488,6 +580,10 @@ void MainWindow::on_actionFire_triggered()
 
 void MainWindow::on_actionWater_triggered()
 {
+    if(Window_State==0)
+    {
+        return;
+    }
     if(Soldier_OnMove==false)
     {
         Set_Barrier=3;
@@ -503,13 +599,15 @@ void MainWindow::on_actionWater_triggered()
     }
 }
 
+
+
 void MainWindow::Init_Barriers()
 {
     for (int i=0;i<20;i++)
     {
-        int b_x=qrand() % 30;
-        int b_y=qrand() % 19+1;
-        int type=qrand() % 3+1;
+        int b_x=QRandomGenerator::global()->generate() % 30;
+        int b_y=QRandomGenerator::global()->generate() % 19+1;
+        int type=QRandomGenerator::global()->generate() % 3+1;
         if(isLoad[b_x][b_y]==1)
         {
             Barriers.append(new Barrier(b_x,b_y,1,1,type));

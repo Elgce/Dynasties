@@ -20,6 +20,7 @@ public:
     void Set_Bkg(QPixmap);
     void Init_Soldiers();
     void mousePressEvent(QMouseEvent* event);
+    void keyPressEvent(QKeyEvent *event);
     void Init_SoldierState(Soldier *);
     void Init_Barriers();
     QPixmap bkg_map;
@@ -42,8 +43,14 @@ public:
     bool Soldier_OnMove=false;
     void Init_Cities();
     void Init_Blocks();
-public slots:
+    void Init();
 
+    EscWidget * Esc_Widget;
+
+public slots:
+    void Set_WindowState(int);
+    void Start_Window();
+    void Continue_Window();
 signals:
 
 private slots:
