@@ -27,6 +27,8 @@ public:
     QPixmap bkg_map;
     QSound * bkm;
     QSound * atta;
+    QMediaPlayer* mp4_player;
+    QVideoWidget* mp4_videoWidget;
     QDateTime time;
     int Mine_Sol_x[10]={13,12,11,10,9,10,9,10,11,12};
     int Mine_Sol_y[10]={10,9,8,8,9,10,11,12,12,11};

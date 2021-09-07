@@ -26,4 +26,6 @@
 #include <QtGlobal>
 #include <escwidget.h>
 #include <QRandomGenerator>
+#include <QMediaPlayer>
+#include <QVideoWidget>
 #endif // HEADS_H

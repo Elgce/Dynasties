@@ -20,5 +20,6 @@
     <qresource prefix="/Music">
         <file>Music/bkm.wav</file>
         <file>Music/atta.wav</file>
+        <file>Music/kingdom.mp4</file>
     </qresource>
 </RCC>

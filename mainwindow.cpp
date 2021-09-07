@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     this->setWindowTitle("War of Soldiers");
     this->setWindowIcon(QIcon(":/images/Res/fire.png"));
     ui->lineEdit->setStyleSheet("QLineEdit{background-color:transparent}"
@@ -43,10 +44,17 @@ void MainWindow::Continue_Window()
 
 void MainWindow::Start_Window()
 {
-
+    Esc_Widget->close();
+    mp4_player=new QMediaPlayer;
+    mp4_videoWidget=new QVideoWidget;
+    mp4_player->setVideoOutput(mp4_videoWidget);
+    mp4_player->setMedia(QUrl("qrc:/Music/Music/kingdom.mp4"));
+    mp4_videoWidget->show();
+    mp4_player->play();
+    ui->verticalLayout->addWidget(mp4_videoWidget);
     Window_State=1;
     Init();
-    Esc_Widget->close();
+
 }
 
 void MainWindow::Init()
@@ -173,6 +181,12 @@ void MainWindow::paintEvent(QPaintEvent *event)
 
 void MainWindow::timerEvent(QTimerEvent * ev)
 {
+    if(mp4_player->state()==QMediaPlayer::StoppedState)
+    {
+        ui->verticalLayout->removeWidget(mp4_videoWidget);
+        mp4_videoWidget->close();
+        mp4_player->stop();
+    }
     if(Window_State==0)
     {
         return;
