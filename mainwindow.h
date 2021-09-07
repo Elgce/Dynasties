@@ -22,6 +22,7 @@ public:
     void mousePressEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent *event);
     void Init_SoldierState(Soldier *);
+    void Init_SoldierDetail(Soldier *);
     void Init_Barriers();
     QPixmap bkg_map;
     QSound * bkm;
@@ -69,6 +70,7 @@ private:
     bool is_PrintBlock=false;
     int num_inControl=-1;
     QMenu * Soldier_State;
+    QMenu * Soldier_Detail;
     QPoint Pos;
 };
 #endif // MAINWINDOW_H

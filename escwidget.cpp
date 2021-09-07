@@ -39,6 +39,6 @@ void EscWidget::COBtn_Click()
 
 void EscWidget::on_IntroBtn_clicked()
 {
-    QMessageBox::warning(this,"Introduction","Producted by Ben Qingwei\nAll rignts Reserved\n");
+    QMessageBox::warning(this,"Introduction","Producted by Ben Qingwei\nAll rignts Reserved\nhsdjkhfkjdshfjsdjkfhakjsfhjkahsdfajskdhjk");
 }
 

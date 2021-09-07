@@ -7,6 +7,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("War of Soldiers");
+    this->setWindowIcon(QIcon(":/images/Res/fire.png"));
+    ui->lineEdit->setStyleSheet("QLineEdit{background-color:transparent}"
+                                "QLineEdit{border-width:0;border-style:outset}");
     Esc_Widget=new EscWidget;
     connect(Esc_Widget,SIGNAL(StartBtn_Clicked()),this,SLOT(Start_Window()));
     connect(Esc_Widget,SIGNAL(ContinueBtn_Clicked()),this,SLOT(Continue_Window()));
@@ -380,10 +384,11 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     {
         return;
     }
+    int _x=event->x()/PIC_WIDTH;
+    int _y=event->y()/PIC_HEIGHT;
     if(event->button()==Qt::LeftButton)
     {
-        int _x=event->x()/PIC_WIDTH;
-        int _y=event->y()/PIC_HEIGHT;
+
         if(Click_Unit==false && isLoad[_x][_y]==2 && Set_Barrier==0 && Soldier_OnMove==false)
         {
             if(Soldiers.size()>0)
@@ -446,6 +451,45 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             Set_Barrier=0;
         }
     }
+
+    if(event->button()==Qt::RightButton)
+    {
+        if(isLoad[_x][_y]==2)
+        {
+            if(Soldiers.size()>0)
+            for (int t=0;t<Soldiers.size();t++)
+            {
+                if(Soldiers[t]->Get_Loc().x==_x*PIC_WIDTH && Soldiers[t]->Get_Loc().y==_y*PIC_HEIGHT)
+                {
+                    num_inControl=t;
+                    break;
+                }
+            }
+            Pos=event->globalPos();
+            Init_SoldierDetail(Soldiers[num_inControl]);
+            Soldier_Detail->popup(Pos);
+            num_inControl=-1;
+        }
+        if(isLoad[_x][_y]==-2)
+        {
+            if(Against_Soldiers.size()>0)
+            {
+                for (int t=0;t<Against_Soldiers.size();t++)
+                {
+                    if(Against_Soldiers[t]->Get_Loc().x==PIC_WIDTH*_x && Against_Soldiers[t]->Get_Loc().y==_y*PIC_HEIGHT)
+                    {
+                        num_inControl=t;
+                        break;
+                    }
+                }
+                Pos=event->globalPos();
+                Init_SoldierDetail(Against_Soldiers[num_inControl]);
+                Soldier_Detail->popup(Pos);
+                num_inControl=-1;
+            }
+        }
+
+    }
 }
 
 
@@ -475,6 +519,21 @@ void MainWindow::Init_SoldierState(Soldier * _soldier)
     pAction_static->setText("Static");
     Soldier_State->addAction(pAction_static);
     connect(pAction_static,SIGNAL(triggered()),_soldier,SLOT(To_Static()));
+}
+
+void MainWindow::Init_SoldierDetail(Soldier * _soldier)
+{
+    Soldier_Detail=new QMenu(this);
+    QAction *pAction_blood=new QAction(Soldier_Detail);
+    pAction_blood->setText("Blood:"+QString::number(_soldier->Get_Blood()));
+    Soldier_Detail->addAction(pAction_blood);
+    QAction *pAction_attack=new QAction(Soldier_Detail);
+    pAction_attack->setText("Attack:"+QString::number(_soldier->Get_Attack()));
+    Soldier_Detail->addAction(pAction_attack);
+    QAction *pAction_armor=new QAction(Soldier_Detail);
+    pAction_armor->setText("Armor:"+QString::number(int(_soldier->Get_Armor()*100)));
+    Soldier_Detail->addAction(pAction_armor);
+
 }
 
 

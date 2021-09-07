@@ -22,7 +22,18 @@
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>530</y>
+      <width>251</width>
+      <height>31</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
