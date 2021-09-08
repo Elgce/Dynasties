@@ -57,12 +57,12 @@ signals:
 
 private:
 
-    int Move_Num=2;
+    int Move_Num=1;
     Location Loc;
     int Speed;
     int Blood;
-    int Attack=50;
-    double Armor=0.4;
+    int Attack=25;
+    double Armor=0.2;
     int Pic_Num=0;
     int Pic_Max;
     QString Pic_Path="";

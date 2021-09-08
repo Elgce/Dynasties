@@ -27,9 +27,9 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
+      <y>50</y>
       <width>961</width>
-      <height>531</height>
+      <height>481</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout"/>
@@ -37,10 +37,20 @@
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>529</y>
-      <width>461</width>
-      <height>31</height>
+      <x>200</x>
+      <y>550</y>
+      <width>331</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="Titleline">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>0</y>
+      <width>311</width>
+      <height>51</height>
      </rect>
     </property>
    </widget>

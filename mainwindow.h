@@ -30,6 +30,8 @@ public:
     QMediaPlayer* mp4_player;
     QVideoWidget* mp4_videoWidget;
     QDateTime time;
+    int Barrier_Added=0;
+    int add_num=0;
     int Mine_Sol_x[10]={13,12,11,10,9,10,9,10,11,12};
     int Mine_Sol_y[10]={10,9,8,8,9,10,11,12,12,11};
     int Ag_Sol_x[9]={17,18,19,20,21,20,19,18,19};
@@ -43,12 +45,14 @@ public:
     QVector<City*>Cities;
     QVector<Barrier*>Barriers;
     Location Aim;
+    Soldier* Npc;
+
     void Set_MenuStyle(QMenu *);
     bool Soldier_OnMove=false;
     void Init_Cities();
     void Init_Blocks();
     void Init();
-
+    void Init_2();
     EscWidget * Esc_Widget;
 
 public slots:

@@ -17,6 +17,12 @@ void Soldier::Set_TySt(int _type, int _stand)
         Attack_Path=":/images/Res/zhaoyun_attack.jpg";
         Img.load(Path);
     }
+    else if (Type==3)
+    {
+        Path=":/images/Res/soldier.png";
+        Attack_Path=":/images/Res/sodier.png";
+        Img.load(Path);
+    }
     Convert_Tranparent();
     Line=Stand;
 
@@ -48,7 +54,7 @@ void Soldier::To_Attack()
     Img.load(Attack_Path);
     Convert_Tranparent();
     Line=2;
-    Set_Attack(70);
+    Set_Attack(40);
 }
 
 void Soldier::To_Defense()
@@ -58,7 +64,7 @@ void Soldier::To_Defense()
     Pic_State=0;
     State=2;
     Line=0;
-    Set_Armor(0.4);
+    Set_Armor(0.3);
 }
 
 void Soldier::To_Static()
@@ -72,7 +78,7 @@ void Soldier::To_Static()
     else Line=1;
     is_Action=false;
     Set_Armor(0.2);
-    Set_Attack(50);
+    Set_Attack(25);
 }
 
 int Soldier::Get_Line() const
