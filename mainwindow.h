@@ -75,6 +75,7 @@ private:
     bool Click_Unit=false;
     int Set_Barrier=0;// 0: not start   1: mount  2: fire  3: water
     bool is_PrintBlock=false;
+    bool has_VideoPlayed=false;
     int num_inControl=-1;
     QMenu * Soldier_State;
     QMenu * Soldier_Detail;

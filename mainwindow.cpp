@@ -58,21 +58,79 @@ void MainWindow::Continue_Window()
 void MainWindow::Start_Window()
 {
     Esc_Widget->close();
-    mp4_player=new QMediaPlayer;
-    mp4_videoWidget=new QVideoWidget;
-    mp4_player->setVideoOutput(mp4_videoWidget);
-    mp4_player->setMedia(QUrl("qrc:/Music/Music/kingdom.mp4"));
-    mp4_videoWidget->show();
-    mp4_player->play();
-    ui->verticalLayout->addWidget(mp4_videoWidget);
-    Window_State=1;
+    if(has_VideoPlayed==false)
+    {
+        mp4_player=new QMediaPlayer;
+        mp4_videoWidget=new QVideoWidget;
+        mp4_player->setVideoOutput(mp4_videoWidget);
+        mp4_player->setMedia(QUrl("qrc:/Music/Music/kingdom.mp4"));
+        mp4_videoWidget->show();
+        mp4_player->play();
+        ui->verticalLayout->addWidget(mp4_videoWidget);
+
+    }
+
     Init();
+    Window_State=1;
+
 
 }
 
 void MainWindow::Init()
 {
     ui->Titleline->setPlaceholderText("颖川之战");
+    num_inControl=-1;
+    Set_Barrier=0;
+    Click_Unit=false;
+    is_PrintBlock=false;
+
+    if(Soldiers.size()>0)
+    {
+        for (int i=0;i<Soldiers.size();i++)
+        {
+            delete Soldiers[i];
+        }
+    }
+    Soldiers.clear();
+
+    if(Against_Soldiers.size()>0)
+    {
+        for (int i=0;i<Against_Soldiers.size();i++)
+        {
+            delete Against_Soldiers[i];
+        }
+    }
+    Against_Soldiers.clear();
+
+    if(Cities.size()>0)
+    {
+        for (int i=0;i<Cities.size();i++)
+        {
+            delete Cities[i];
+
+        }
+    }
+    Cities.clear();
+    if(Barriers.size()>0)
+    {
+        for (int i=0;i<Barriers.size();i++)
+        {
+            delete Barriers[i];
+
+        }
+    }
+    Barriers.clear();
+
+    Init_Soldiers();
+    Init_Blocks();
+    Init_Cities();
+    Init_Barriers();
+    eventId1=startTimer(200);
+}
+
+void MainWindow::Init_2()
+{
+    ui->Titleline->setPlaceholderText("夏阳之战");
     num_inControl=-1;
     Set_Barrier=0;
     Click_Unit=false;
@@ -110,11 +168,6 @@ void MainWindow::Init()
     Init_Cities();
     Init_Barriers();
     eventId1=startTimer(200);
-}
-
-void MainWindow::Init_2()
-{
-
 }
 
 void MainWindow::Set_WindowState(int _state)
@@ -215,6 +268,11 @@ void MainWindow::timerEvent(QTimerEvent * ev)
         mp4_player->stop();
         Window_State=2;
         ui->lineEdit->setText("皇甫统领,朝廷命您平息黄巾起义!");
+        has_VideoPlayed=true;
+    }
+    if(Window_State==1 && has_VideoPlayed==true)
+    {
+        Window_State=2;
     }
     if(Window_State==2)
     {
@@ -251,7 +309,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             {
                 Init_2();
                 ui->lineEdit->clear();
-                ui->lineEdit->setText("敌军余部出现在夏阳曲!");
+                ui->lineEdit->setText("敌军余部出现在夏阳!");
             }
             else if(tate==2)
             {
@@ -261,12 +319,12 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             else if(tate==3)
             {
                 ui->lineEdit->clear();
-                ui->lineEdit->setText("夏阳曲之战,任务:八回合内消灭敌方单位");
+                ui->lineEdit->setText("夏阳之战,任务:八回合内消灭敌方单位");
             }
             else if(tate==4)
             {
                 ui->lineEdit->clear();
-                ui->lineEdit->setText("夏阳曲之战  回合1");
+                ui->lineEdit->setText("夏阳之战  回合1");
                 Window_State=31;
             }
         }
@@ -276,7 +334,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
     Npc->Pic_State=(Npc->Pic_State+1)%Npc->Get_Picmax();
 
 
-    if(Against_Soldiers.size()==0)
+    if(Against_Soldiers.size()==0 && Window_State>4)
     {
         ui->lineEdit->setText("恭喜将军旗开得胜!");
         for (int i=0;i<Soldiers.size();i++)
@@ -289,7 +347,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
         killTimer(eventId1);
         return;
     }
-    if(Soldiers.size()==0)
+    if(Soldiers.size()==0 && Window_State>4)
     {
         ui->lineEdit->setText("统领不用气馁,再来一局");
         QMessageBox::warning(this,"Game Over","You Lose!");
@@ -310,6 +368,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
         {
             delete Soldiers[i];
             Soldiers.erase(Soldiers.begin()+i);
+            break;
         }
         else if(isLoad[Soldiers[i]->Get_Loc().x/PIC_WIDTH][Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==6 && Soldiers[i]->is_OnMove==true)
         {
@@ -382,6 +441,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
                             isLoad[Against_Soldiers[k]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[k]->Get_Loc().y/PIC_HEIGHT]=1;
                             delete Against_Soldiers[k];
                             Against_Soldiers.erase(Against_Soldiers.begin()+k);
+                            break;
                         }
                         else
                         {
@@ -439,7 +499,9 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             isLoad[Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]=1;
             delete Against_Soldiers[i];
             Against_Soldiers.erase(Against_Soldiers.begin()+i);
+            break;
         }
+    }
 
         for (int i=0;i<Against_Soldiers.size();i++)
         {
@@ -469,6 +531,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
                                 isLoad[Soldiers[k]->Get_Loc().x/PIC_WIDTH][Soldiers[k]->Get_Loc().y/PIC_HEIGHT]=1;
                                 delete Soldiers[k];
                                 Soldiers.erase(Soldiers.begin()+k);
+                                break;
                             }
 
 
@@ -479,14 +542,13 @@ void MainWindow::timerEvent(QTimerEvent * ev)
                 }
             }
         }
-    }
 
     if(Window_State>=20)
     {
         bool is_allMoved=true;
         for (int i=0;i<Soldiers.size();i++)
         {
-            if(Soldiers[i]->Time_Moved!=Soldiers[i]->Get_Movemax())
+            if(Soldiers[i]->Time_Moved!=Soldiers[i]->Get_Movemax() || Soldier_OnMove==true)
             {
                 is_allMoved=false;
                 break;
@@ -529,7 +591,9 @@ void MainWindow::timerEvent(QTimerEvent * ev)
                 if(isLoad[(Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH)-1][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==1  &&
                         isLoad[(Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH)-1][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]!=6)
                 {
+                    isLoad[Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]=1;
                     Against_Soldiers[i]->Change_Loc(Against_Soldiers[i]->Get_Loc().x-PIC_WIDTH,Against_Soldiers[i]->Get_Loc().y);
+                    isLoad[Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]=-2;
                 }
                 else if(isLoad[(Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH)-1][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==2)
                 {
@@ -599,7 +663,7 @@ void MainWindow::Init_Soldiers()
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    if(Window_State<=0)
+    if(Window_State==0)
         return;
     if(event->key()==Qt::Key_Escape)
     {
@@ -836,7 +900,7 @@ void MainWindow::Init_Cities()
             isLoad[i][j]=3;
         }
     }
-    Cities.append(new City(0,17,4,3,":images/Res/Town_west.png"));
+    Cities.append(new City(0,17,4,3,":/images/Res/Town_west.png"));
 
 
     for (int i=26;i<30;i++)
@@ -846,7 +910,9 @@ void MainWindow::Init_Cities()
             isLoad[i][j]=3;
         }
     }
-    Cities.append(new City(26,17,4,3,":images/Res/Town_east.png"));
+    Cities.append(new City(26,17,4,3,":/images/Res/Town_east.png"));
+
+
 }
 
 
