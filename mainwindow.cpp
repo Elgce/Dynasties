@@ -50,7 +50,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::Continue_Window()
 {
-    Window_State=2;
     Esc_Widget->close();
     eventId1=startTimer(200);
 }
@@ -145,6 +144,14 @@ void MainWindow::Init_2()
         }
     }
     Soldiers.clear();
+    if(Against_Soldiers.size()>0)
+    {
+        for (int i=0;i<Against_Soldiers.size();i++)
+        {
+            delete Against_Soldiers[i];
+        }
+    }
+    Against_Soldiers.clear();
     if(Cities.size()>0)
     {
         for (int i=0;i<Cities.size();i++)
@@ -356,19 +363,16 @@ void MainWindow::timerEvent(QTimerEvent * ev)
     }
 
 
-
     if(Soldiers.size()>0)
     for(int i=0;i<Soldiers.size();i++)
     {
         if(isLoad[Soldiers[i]->Get_Loc().x/PIC_WIDTH][Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==4)
         {
-            Soldiers[i]->Dam_Blood(1);
+            Soldiers[i]->Kill_Blood(10);
         }
         else if(isLoad[Soldiers[i]->Get_Loc().x/PIC_WIDTH][Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==5)
         {
-            delete Soldiers[i];
-            Soldiers.erase(Soldiers.begin()+i);
-            break;
+            Soldiers[i]->Kill_Blood(Soldiers[i]->Get_Blood());
         }
         else if(isLoad[Soldiers[i]->Get_Loc().x/PIC_WIDTH][Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==6 && Soldiers[i]->is_OnMove==true)
         {
@@ -390,6 +394,14 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             }
             isLoad[Aim.x/PIC_WIDTH][Aim.y/PIC_HEIGHT]=1;
         }
+
+        if(Soldiers[i]->Get_Blood()<=0)
+        {
+            isLoad[Soldiers[i]->Get_Loc().x/PIC_WIDTH][Soldiers[i]->Get_Loc().y/PIC_HEIGHT]=1;
+            delete Soldiers[i];
+            Soldiers.erase(Soldiers.begin()+i);
+            break;
+        }
     }
 
 
@@ -399,22 +411,27 @@ void MainWindow::timerEvent(QTimerEvent * ev)
     {
         if(isLoad[Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH][Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==4)
         {
-            Against_Soldiers[i]->Dam_Blood(1);
+            Against_Soldiers[i]->Kill_Blood(10);
         }
         else if(isLoad[Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH][Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==5)
         {
-            Against_Soldiers[i]->Dam_Blood(100);
+            Against_Soldiers[i]->Kill_Blood(Against_Soldiers[i]->Get_Blood());
+        }
+
+
+        if(Against_Soldiers[i]->Get_Blood()<=0)
+        {
+            isLoad[Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]=1;
+            delete Against_Soldiers[i];
+            Against_Soldiers.erase(Against_Soldiers.begin()+i);
+            break;
         }
     }
 
-
+    if(Soldiers.size()>0)
     for(int i=0;i<Soldiers.size();i++)
     {
-        if(Soldiers[i]->Get_Blood()<=0)
-        {
-            delete Soldiers[i];
-            Soldiers.erase(Against_Soldiers.begin()+i);
-        }
+
         if(Soldiers[i]->is_Action==true)
         {
             if(Soldiers[i]->Pic_State==0)
@@ -436,23 +453,25 @@ void MainWindow::timerEvent(QTimerEvent * ev)
                     {
                         Against_Soldiers[k]->Kill_Blood(Soldiers[i]->Get_Attack()*(1-double(Against_Soldiers[k]->Get_Armor())));
 
-                        if(Against_Soldiers[k]->Get_Blood()<=0)
-                        {
-                            isLoad[Against_Soldiers[k]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[k]->Get_Loc().y/PIC_HEIGHT]=1;
-                            delete Against_Soldiers[k];
-                            Against_Soldiers.erase(Against_Soldiers.begin()+k);
-                            break;
-                        }
-                        else
+                        if(Against_Soldiers[k]->Get_Blood()>0)
+
                         {
                             Against_Soldiers[k]->To_Attack();
                         }
-
+                        else
+                        {
+                            if(Against_Soldiers[k]->Get_Blood()<=0)
+                            {
+                                isLoad[Against_Soldiers[k]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[k]->Get_Loc().y/PIC_HEIGHT]=1;
+                                delete Against_Soldiers[k];
+                                Against_Soldiers.erase(Against_Soldiers.begin()+k);
+                                break;
+                            }
+                        }
                     }
                 }
                 Soldiers[i]->is_Action=false;
                 Soldiers[i]->To_Defense();
-                Soldiers[i]->To_Static();
             }
         }
         if(Soldiers[i]->is_OnMove==true)
@@ -492,16 +511,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
         }
 
     }
-    for (int i=0;i<Against_Soldiers.size();i++)
-    {
-        if(Against_Soldiers[i]->Get_Blood()<=0)
-        {
-            isLoad[Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]=1;
-            delete Against_Soldiers[i];
-            Against_Soldiers.erase(Against_Soldiers.begin()+i);
-            break;
-        }
-    }
+
 
         for (int i=0;i<Against_Soldiers.size();i++)
         {
@@ -516,6 +526,8 @@ void MainWindow::timerEvent(QTimerEvent * ev)
                 if(Against_Soldiers[i]->Pic_State==Against_Soldiers[i]->Get_Picmax())
                 {
                     if(Soldiers.size()>0)
+                    Against_Soldiers[i]->is_Action=false;
+                    Against_Soldiers[i]->To_Static();
                     for (int k=0;k<Soldiers.size();k++)
                     {
                         if ((((Soldiers[k]->Get_Loc().x==Against_Soldiers[i]->Get_Loc().x-PIC_WIDTH)||(Soldiers[k]->Get_Loc().x==Against_Soldiers[i]->Get_Loc().x+PIC_WIDTH))
@@ -537,8 +549,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
 
                         }
                     }
-                    Against_Soldiers[i]->is_Action=false;
-                    Against_Soldiers[i]->To_Static();
+
                 }
             }
         }
@@ -546,6 +557,8 @@ void MainWindow::timerEvent(QTimerEvent * ev)
     if(Window_State>=20)
     {
         bool is_allMoved=true;
+
+        if(Soldiers.size()>0)
         for (int i=0;i<Soldiers.size();i++)
         {
             if(Soldiers[i]->Time_Moved!=Soldiers[i]->Get_Movemax() || Soldier_OnMove==true)
@@ -582,10 +595,15 @@ void MainWindow::timerEvent(QTimerEvent * ev)
                 ui->lineEdit->setText("夏阳曲之战  回合"+QString::number(Window_State-30));
 
             }
+
+
+            if(Soldiers.size()>0)
             for(int i=0;i<Soldiers.size();i++)
             {
                 Soldiers[i]->Time_Moved=0;
             }
+
+            if(Against_Soldiers.size()>0)
             for (int i=0;i<Against_Soldiers.size();i++)
             {
                 if(isLoad[(Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH)-1][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==1  &&
@@ -606,6 +624,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             }
         }
     }
+
     repaint();
 
 }
@@ -667,7 +686,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         return;
     if(event->key()==Qt::Key_Escape)
     {
-        Window_State=0;
         Esc_Widget->show();
         killTimer(eventId1);
     }
@@ -684,7 +702,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     int _y=event->y()/PIC_HEIGHT;
     if(event->button()==Qt::LeftButton)
     {
-
         if(Click_Unit==false && isLoad[_x][_y]==2 && Set_Barrier==0 && Soldier_OnMove==false)
         {
             if(Soldiers.size()>0)
