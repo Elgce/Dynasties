@@ -72,7 +72,6 @@ void MainWindow::Start_Window()
     Init();
     Window_State=1;
 
-
 }
 
 void MainWindow::Init()
@@ -125,6 +124,7 @@ void MainWindow::Init()
     Init_Cities();
     Init_Barriers();
     eventId1=startTimer(200);
+    add_num=0;
 }
 
 void MainWindow::Init_2()
@@ -373,6 +373,11 @@ void MainWindow::timerEvent(QTimerEvent * ev)
         else if(isLoad[Soldiers[i]->Get_Loc().x/PIC_WIDTH][Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==5)
         {
             Soldiers[i]->Kill_Blood(Soldiers[i]->Get_Blood());
+            Soldier_OnMove=false;
+            isLoad[Aim.x/PIC_WIDTH][Aim.y/PIC_HEIGHT]=1;
+            delete Soldiers[i];
+            Soldiers.erase(Soldiers.begin()+i);
+            break;
         }
         else if(isLoad[Soldiers[i]->Get_Loc().x/PIC_WIDTH][Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==6 && Soldiers[i]->is_OnMove==true)
         {
@@ -694,7 +699,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
-    if(Window_State==0)
+    if(Window_State<=20)
     {
         return;
     }
