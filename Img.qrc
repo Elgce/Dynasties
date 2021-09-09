@@ -17,6 +17,8 @@
         <file>Res/zhaoyun.png</file>
         <file>Res/zhaoyun_attack.jpg</file>
         <file>Res/soldier.png</file>
+        <file>Res/man.jpg</file>
+        <file>Res/bubing.png</file>
     </qresource>
     <qresource prefix="/Music">
         <file>Music/bkm.wav</file>

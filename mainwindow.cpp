@@ -76,7 +76,8 @@ void MainWindow::Start_Window()
 
 void MainWindow::Init()
 {
-    ui->Titleline->setPlaceholderText("颖川之战");
+    Barrier_Added=0;
+    ui->Titleline->setPlaceholderText("颍川之战");
     num_inControl=-1;
     Set_Barrier=0;
     Click_Unit=false;
@@ -134,7 +135,7 @@ void MainWindow::Init_2()
     Set_Barrier=0;
     Click_Unit=false;
     is_PrintBlock=false;
-
+    Barrier_Added=0;
     if(Soldiers.size()>0)
     {
         for (int i=0;i<Soldiers.size();i++)
@@ -157,7 +158,6 @@ void MainWindow::Init_2()
         for (int i=0;i<Cities.size();i++)
         {
             delete Cities[i];
-
         }
     }
     Cities.clear();
@@ -166,15 +166,16 @@ void MainWindow::Init_2()
         for (int i=0;i<Barriers.size();i++)
         {
             delete Barriers[i];
-
         }
     }
+
     Barriers.clear();
     Init_Soldiers();
     Init_Blocks();
     Init_Cities();
     Init_Barriers();
     eventId1=startTimer(200);
+
 }
 
 void MainWindow::Set_WindowState(int _state)
@@ -273,13 +274,13 @@ void MainWindow::timerEvent(QTimerEvent * ev)
         ui->verticalLayout->removeWidget(mp4_videoWidget);
         mp4_videoWidget->close();
         mp4_player->stop();
-        Window_State=2;
+        Window_State=3;
         ui->lineEdit->setText("皇甫统领,朝廷命您平息黄巾起义!");
         has_VideoPlayed=true;
     }
     if(Window_State==1 && has_VideoPlayed==true)
     {
-        Window_State=2;
+        Window_State=3;
     }
     if(Window_State==2)
     {
@@ -316,7 +317,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             {
                 Init_2();
                 ui->lineEdit->clear();
-                ui->lineEdit->setText("敌军余部出现在夏阳!");
+                ui->lineEdit->setText("夏阳出现敌军!");
             }
             else if(tate==2)
             {
@@ -341,18 +342,35 @@ void MainWindow::timerEvent(QTimerEvent * ev)
     Npc->Pic_State=(Npc->Pic_State+1)%Npc->Get_Picmax();
 
 
-    if(Against_Soldiers.size()==0 && Window_State>4)
+    if(Against_Soldiers.size()==0)
     {
-        ui->lineEdit->setText("恭喜将军旗开得胜!");
-        for (int i=0;i<Soldiers.size();i++)
+        if(Window_State>20 && Window_State<=23)
         {
-            delete Soldiers[i];
+            ui->lineEdit->setText("恭喜将军旗开得胜!");
+            for (int i=0;i<Soldiers.size();i++)
+            {
+                delete Soldiers[i];
+            }
+            Soldiers.clear();
+            Window_State=3;
+            add_num=0;
+            killTimer(eventId1);
+            return;
         }
-        Soldiers.clear();
-        Window_State=3;
-        add_num=0;
-        killTimer(eventId1);
-        return;
+        else if(Window_State>30 && Window_State<=38)
+        {
+            ui->lineEdit->setText("恭喜将军大获全胜!");
+            for (int i=0;i<Soldiers.size();i++)
+            {
+                delete Soldiers[i];
+            }
+            Soldiers.clear();
+            Window_State=5;
+            killTimer(eventId1);
+            return;
+        }
+
+
     }
     if(Soldiers.size()==0 && Window_State>4)
     {
@@ -672,6 +690,29 @@ void MainWindow::Init_Soldiers()
         Against_Soldiers[Against_Soldiers.size()-1]->Set_TySt(2,1);
     }
 
+    if(Window_State==3)
+    {
+        for (int k=0;k<9;k++)
+        {
+            int i=Ag_Sol_x[k];
+            int j=Ag_Sol_y[k];
+            Against_Soldiers.append(new Soldier(PIC_WIDTH*(i+6),PIC_HEIGHT*(j+4),100,100,4,10));
+            isLoad[i+6][j+4]=-2;
+            Against_Soldiers[Against_Soldiers.size()-1]->Pic_State=0;
+            Against_Soldiers[Against_Soldiers.size()-1]->Set_TySt(4,1);
+        }
+        for(int k=0;k<10;k++)
+        {
+            int i=Mine_Sol_x[k];
+            int j=Mine_Sol_y[k];
+            Soldiers.append(new Soldier(PIC_WIDTH*(i-4),PIC_HEIGHT*(j+5),100,100,4,10));
+            isLoad[i-4][j+5]=2;
+            Soldiers[Soldiers.size()-1]->Pic_State=0;
+            Soldiers[Soldiers.size()-1]->Set_TySt(5,2);
+        }
+
+    }
+
 
     //init the npc
     Npc=new Soldier(PIC_WIDTH*5,PIC_HEIGHT*18,100,100,4,10);
@@ -907,7 +948,7 @@ void MainWindow::Init_Cities()
 
     for (int i=7;i<13;i++)
     {
-        for (int j=0;j<4;j++)
+        for (int j=0;j<3;j++)
         {
             isLoad[i][j]=3;
         }
@@ -934,6 +975,32 @@ void MainWindow::Init_Cities()
     }
     Cities.append(new City(26,17,4,3,":/images/Res/Town_east.png"));
 
+    if(Window_State==3)
+    {
+        for (int i=15;i<19;i++)
+        {
+            isLoad[i][21-i]=3;
+            isLoad[i][22-i]=3;
+            if(i!=15)
+            {
+                isLoad[i][23-i]=3;
+            }
+        }
+        isLoad[17][4]=1;
+        isLoad[14][7]=3;
+        Cities.append(new City(14,4,20,8,":/images/Res/City_west.png"));
+
+
+        for (int i=16;i<20;i++)
+        {
+            isLoad[i][i-4]=3;
+            isLoad[i][i-3]=4;
+        }
+        isLoad[15][13]=3;
+        Cities.append(new City(15,12,21,16,":/images/Res/City_east.png"));
+
+
+    }
 
 }
 

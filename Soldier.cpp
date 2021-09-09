@@ -20,7 +20,19 @@ void Soldier::Set_TySt(int _type, int _stand)
     else if (Type==3)
     {
         Path=":/images/Res/soldier.png";
-        Attack_Path=":/images/Res/sodier.png";
+        Attack_Path=":/images/Res/soldier.png";
+        Img.load(Path);
+    }
+    else if(Type==4)
+    {
+        Path=":/images/Res/man.jpg";
+        Attack_Path=":/images/Res/man.jpg";
+        Img.load(Path);
+    }
+    else if(Type==5)
+    {
+        Path=":/images/Res/bubing.png";
+        Attack_Path=":/images/Res/bubing.png";
         Img.load(Path);
     }
     Convert_Tranparent();
@@ -55,6 +67,10 @@ void Soldier::To_Attack()
     Convert_Tranparent();
     Line=2;
     Set_Attack(40);
+    if(Type==4 || Type==5)
+    {
+        Set_Attack(20);
+    }
 }
 
 void Soldier::To_Defense()
@@ -65,6 +81,10 @@ void Soldier::To_Defense()
     State=2;
     Line=0;
     Set_Armor(0.3);
+    if(Type==4 || Type==5)
+    {
+        Set_Armor(0.5);
+    }
 }
 
 void Soldier::To_Static()
@@ -79,6 +99,11 @@ void Soldier::To_Static()
     is_Action=false;
     Set_Armor(0.2);
     Set_Attack(25);
+    if(Type==4 || Type==5)
+    {
+        Set_Armor(0.3);
+        Set_Attack(20);
+    }
 }
 
 int Soldier::Get_Line() const
