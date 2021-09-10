@@ -176,7 +176,6 @@ void MainWindow::Init_2()
     Init_Blocks();
     Init_Cities();
     Init_Barriers();
-    eventId1=startTimer(50);
 
 }
 
@@ -198,7 +197,11 @@ void MainWindow::paintEvent(QPaintEvent *event)
     {
         Vic_Pic.load(":/images/Res/victory.png");
         painter.drawImage(320,215,Vic_Pic,0,0,320,210);
-        killTimer(eventId1);
+        if(eventId1!=0)
+        {
+            killTimer(eventId1);
+            eventId1=0;
+        }
         return;
     }
 
@@ -392,6 +395,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             Soldiers.clear();
             Window_State=5;
 
+            repaint();
             return;
         }
 
@@ -401,7 +405,13 @@ void MainWindow::timerEvent(QTimerEvent * ev)
     {
         ui->lineEdit->setText("统领不用气馁,再来一局");
         QMessageBox::warning(this,"Game Over","You Lose!");
-        killTimer(eventId1);
+        Window_State=1;
+        if(eventId1!=0)
+        {
+            killTimer(eventId1);
+            eventId1=0;
+        }
+
         return;
     }
 
@@ -442,7 +452,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             }
             isLoad[Aim.x/PIC_WIDTH][Aim.y/PIC_HEIGHT]=1;
         }
-        else if(Soldiers[i]->is_OnMove==true)
+        /*else if(Soldiers[i]->is_OnMove==true)
         {
             int _x=Aim.x-Soldiers[i]->Get_Loc().x;
             int _y=Aim.y-Soldiers[i]->Get_Loc().y;
@@ -469,7 +479,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
                 isLoad[Aim.x/PIC_WIDTH][Aim.y/PIC_HEIGHT]=1;
             }
 
-        }
+        }*/
 
 
         if(Soldiers[i]->Get_Blood()<=0)
@@ -720,7 +730,12 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             {
                 ui->lineEdit->setText("统领不用气馁,再来一局");
                 QMessageBox::warning(this,"Game Over","You Lose");
-                killTimer(eventId1);
+                if(eventId1!=0)
+                {
+                    killTimer(eventId1);
+                    eventId1=0;
+                }
+
                 Window_State=2;
                 return;
             }
@@ -877,7 +892,11 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     if(event->key()==Qt::Key_Escape)
     {
         Esc_Widget->show();
-        killTimer(eventId1);
+        if(eventId1!=0)
+        {
+            killTimer(eventId1);
+            eventId1=0;
+        }
     }
 }
 
@@ -923,7 +942,13 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                 {
                     for (int j=0;j<HEIGHT_NUM;j++)
                     {
-                        if((qAbs(i-_x)+qAbs(j-_y))<=Soldiers[num_inControl]->Get_Speed() && (i!=_x || j!=_y))
+                        bool Can_Go=true;
+                        for (int k=1;k<=10;k++)
+                        {
+                            if(isLoad[_x+int(double(i-_x)/10*k)][_y+int(double(j-_y)/10*k)]==3)
+                                Can_Go=false;
+                        }
+                        if((qAbs(i-_x)+qAbs(j-_y))<=Soldiers[num_inControl]->Get_Speed() && (i!=_x || j!=_y) && Can_Go==true)
                         Clor_Block[i][j]=true;
                     }
                 }

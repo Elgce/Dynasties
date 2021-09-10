@@ -39,6 +39,6 @@ void EscWidget::COBtn_Click()
 
 void EscWidget::on_IntroBtn_clicked()
 {
-    QMessageBox::warning(this,"Introduction","Producted by Ben Qingwei\nAll rignts Reserved\nhsdjkhfkjdshfjsdjkfhakjsfhjkahsdfajskdhjk");
+    QMessageBox::warning(this,"Introduction","Producted by Ben Qingwei\nAll rignts Reserved\nYou can remove soldiers by clicking on them\nYou will win if you kill all the against_soldiers\nThere are two different parts at all.");
 }
 
