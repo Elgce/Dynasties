@@ -71,6 +71,10 @@ private slots:
 
     void on_actionWater_triggered();
 
+    void on_actionToWin_triggered();
+
+    void on_actionToFail_triggered();
+
 private:
     Ui::MainWindow *ui;
     bool Click_Unit=false;

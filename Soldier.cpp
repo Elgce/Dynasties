@@ -79,7 +79,7 @@ void Soldier::To_Attack()
     Img.load(Attack_Path);
     Convert_Tranparent();
     Line=2;
-    Set_Attack(40);
+    Set_Attack(200);
     if(Type==4 || Type==5)
     {
         Set_Attack(20);

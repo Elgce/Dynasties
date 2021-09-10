@@ -51,7 +51,7 @@ MainWindow::~MainWindow()
 void MainWindow::Continue_Window()
 {
     Esc_Widget->close();
-    eventId1=startTimer(200);
+    eventId1=startTimer(50);
 }
 
 void MainWindow::Start_Window()
@@ -124,8 +124,9 @@ void MainWindow::Init()
     Init_Blocks();
     Init_Cities();
     Init_Barriers();
-    eventId1=startTimer(200);
+    eventId1=startTimer(50);
     add_num=0;
+    is_BossAlive=false;
 }
 
 void MainWindow::Init_2()
@@ -175,7 +176,7 @@ void MainWindow::Init_2()
     Init_Blocks();
     Init_Cities();
     Init_Barriers();
-    eventId1=startTimer(200);
+    eventId1=startTimer(50);
 
 }
 
@@ -512,7 +513,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
     {
         for (int i=0;i<Against_Soldiers.size();i++)
         {
-            if(Against_Soldiers[i]->Get_Blood()<15)
+            if(Against_Soldiers[i]->Get_Blood()<25)
             Against_Soldiers[i]->Kill_Blood(-15);
         }
     }
@@ -720,6 +721,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
                 ui->lineEdit->setText("统领不用气馁,再来一局");
                 QMessageBox::warning(this,"Game Over","You Lose");
                 killTimer(eventId1);
+                Window_State=2;
                 return;
             }
             else if(Window_State>=30 && Window_State<38)
@@ -1246,3 +1248,29 @@ void MainWindow::Init_Barriers()
     }
 
 }
+
+void MainWindow::on_actionToWin_triggered()
+{
+    if(Against_Soldiers.size()>0)
+    {
+        for (int i=0;i<Against_Soldiers.size();i++)
+        {
+            delete Against_Soldiers[i];
+        }
+    }
+    Against_Soldiers.clear();
+}
+
+
+void MainWindow::on_actionToFail_triggered()
+{
+    if(Soldiers.size()>0)
+    {
+        for (int i=0;i<Soldiers.size();i++)
+        {
+            delete Soldiers[i];
+        }
+    }
+    Soldiers.clear();
+}
+

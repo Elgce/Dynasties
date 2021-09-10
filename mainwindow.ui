@@ -79,6 +79,8 @@
    <addaction name="actionMount"/>
    <addaction name="actionFire"/>
    <addaction name="actionWater"/>
+   <addaction name="actionToWin"/>
+   <addaction name="actionToFail"/>
   </widget>
   <action name="actionMount">
    <property name="icon">
@@ -114,6 +116,30 @@
    </property>
    <property name="toolTip">
     <string>Water</string>
+   </property>
+  </action>
+  <action name="actionToWin">
+   <property name="icon">
+    <iconset resource="Img.qrc">
+     <normaloff>:/images/Res/victory.png</normaloff>:/images/Res/victory.png</iconset>
+   </property>
+   <property name="text">
+    <string>ToWin</string>
+   </property>
+   <property name="toolTip">
+    <string>ToWin</string>
+   </property>
+  </action>
+  <action name="actionToFail">
+   <property name="icon">
+    <iconset resource="Img.qrc">
+     <normaloff>:/images/Res/icon.jpg</normaloff>:/images/Res/icon.jpg</iconset>
+   </property>
+   <property name="text">
+    <string>ToFail</string>
+   </property>
+   <property name="toolTip">
+    <string>ToFail</string>
    </property>
   </action>
  </widget>
