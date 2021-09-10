@@ -75,6 +75,7 @@ int Unit::Get_Picmax()
 void Unit::Dam_Blood(int _blood)
 {
     Blood-=_blood;
+
 }
 
 void Unit::Convert_Tranparent()

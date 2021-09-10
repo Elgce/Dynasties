@@ -19,6 +19,11 @@
         <file>Res/soldier.png</file>
         <file>Res/man.jpg</file>
         <file>Res/bubing.png</file>
+        <file>Res/bkg_1.png</file>
+        <file>Res/victory.png</file>
+        <file>Res/icon.jpg</file>
+        <file>Res/Boss.jpg</file>
+        <file>Res/arrow.png</file>
     </qresource>
     <qresource prefix="/Music">
         <file>Music/bkm.wav</file>

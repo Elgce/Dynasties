@@ -40,13 +40,14 @@ public:
     int Window_State=0;
     int isLoad[WIDTH_NUM][HEIGHT_NUM];//0:wait for use; 1:can reach; 2:my_soldiers; -2:against_soldiers; 3:cities
     bool Clor_Block[WIDTH_NUM][HEIGHT_NUM];
+    bool is_BossAlive=false;
     QVector<Soldier*>Soldiers;
     QVector<Soldier*>Against_Soldiers;
     QVector<City*>Cities;
     QVector<Barrier*>Barriers;
     Location Aim;
     Soldier* Npc;
-
+    QImage Vic_Pic;
     void Set_MenuStyle(QMenu *);
     bool Soldier_OnMove=false;
     void Init_Cities();

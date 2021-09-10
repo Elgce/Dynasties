@@ -22,8 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
                                  "QLineEdit{font-family:STXingkai}");
     ui->Titleline->setReadOnly(true);
     ui->Titleline->setAlignment(Qt::AlignHCenter);
-    this->setWindowTitle("War of Soldiers");
-    this->setWindowIcon(QIcon(":/images/Res/fire.png"));
+    this->setWindowTitle("黄巾起义");
+    this->setWindowIcon(QIcon(":/images/Res/icon.jpg"));
 
     Esc_Widget=new EscWidget;
     connect(Esc_Widget,SIGNAL(StartBtn_Clicked()),this,SLOT(Start_Window()));
@@ -131,6 +131,7 @@ void MainWindow::Init()
 void MainWindow::Init_2()
 {
     ui->Titleline->setPlaceholderText("夏阳之战");
+
     num_inControl=-1;
     Set_Barrier=0;
     Click_Unit=false;
@@ -187,12 +188,19 @@ void MainWindow::Set_WindowState(int _state)
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
-
+    QPainter painter(this);
     if(Window_State==0)
     {
         return;
     }
-    QPainter painter(this);
+    else if(Window_State==5)
+    {
+        Vic_Pic.load(":/images/Res/victory.png");
+        painter.drawImage(320,215,Vic_Pic,0,0,320,210);
+        killTimer(eventId1);
+        return;
+    }
+
 
     //draw all of the clor_blocks
     for (int i=0;i<WIDTH_NUM;i++)
@@ -238,17 +246,29 @@ void MainWindow::paintEvent(QPaintEvent *event)
         painter.drawLine(Soldiers[i]->Get_Loc().x+4,Soldiers[i]->Get_Loc().y-8,Soldiers[i]->Get_Loc().x+20,Soldiers[i]->Get_Loc().y-8);
         painter.setPen(QPen(Qt::green,1));
         painter.drawLine(Soldiers[i]->Get_Loc().x+4,Soldiers[i]->Get_Loc().y-8,Soldiers[i]->Get_Loc().x+20*(double((double)Soldiers[i]->Get_Blood()/100.0)),Soldiers[i]->Get_Loc().y-8);
-
+        if(Soldiers[i]->Get_Type()==6 && Soldiers[i]->is_Action==true)
+        {
+            painter.drawEllipse(Soldiers[i]->Get_Loc().x-180+16,Soldiers[i]->Get_Loc().y-180+16,360,360);
+        }
     }
 
     if(Against_Soldiers.size()>0)
     {
+
         for (int i=0;i<Against_Soldiers.size();i++)
         {
             painter.drawImage(Against_Soldiers[i]->Get_Loc().x,Against_Soldiers[i]->Get_Loc().y,Against_Soldiers[i]->Img,PIC_WIDTH*(Against_Soldiers[i]->Pic_State),PIC_HEIGHT*Against_Soldiers[i]->Get_Line(),PIC_HEIGHT,PIC_WIDTH);
-
             painter.setPen(QPen(Qt::white,2));
-            painter.drawLine(Against_Soldiers[i]->Get_Loc().x+4,Against_Soldiers[i]->Get_Loc().y-8,Against_Soldiers[i]->Get_Loc().x+20,Against_Soldiers[i]->Get_Loc().y-8);
+            if(i==0 && is_BossAlive==true)
+            {
+                 painter.drawLine(Against_Soldiers[i]->Get_Loc().x+4,Against_Soldiers[i]->Get_Loc().y-8,Against_Soldiers[i]->Get_Loc().x+40,Against_Soldiers[i]->Get_Loc().y-8);
+            }
+
+            else
+            {
+                painter.drawLine(Against_Soldiers[i]->Get_Loc().x+4,Against_Soldiers[i]->Get_Loc().y-8,Against_Soldiers[i]->Get_Loc().x+20,Against_Soldiers[i]->Get_Loc().y-8);
+            }
+
             painter.setPen(QPen(Qt::red,1));
             painter.drawLine(Against_Soldiers[i]->Get_Loc().x+4,Against_Soldiers[i]->Get_Loc().y-8,Against_Soldiers[i]->Get_Loc().x+20*(double((double)Against_Soldiers[i]->Get_Blood()/100.0)),Against_Soldiers[i]->Get_Loc().y-8);
         }
@@ -274,14 +294,18 @@ void MainWindow::timerEvent(QTimerEvent * ev)
         ui->verticalLayout->removeWidget(mp4_videoWidget);
         mp4_videoWidget->close();
         mp4_player->stop();
-        Window_State=3;
+        Window_State=2;
         ui->lineEdit->setText("皇甫统领,朝廷命您平息黄巾起义!");
         has_VideoPlayed=true;
     }
+
+
     if(Window_State==1 && has_VideoPlayed==true)
     {
-        Window_State=3;
+        Window_State=2;
     }
+
+
     if(Window_State==2)
     {
         add_num++;
@@ -297,7 +321,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             {
                 ui->lineEdit->clear();
 
-                ui->lineEdit->setText("颖川之战,任务:三回合内消灭敌方单位");
+                ui->lineEdit->setText("颖川之战,任务:四回合内消灭敌方单位");
 
             }
             else if(tate==3)
@@ -354,25 +378,25 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             Soldiers.clear();
             Window_State=3;
             add_num=0;
-            killTimer(eventId1);
             return;
         }
         else if(Window_State>30 && Window_State<=38)
         {
             ui->lineEdit->setText("恭喜将军大获全胜!");
+
             for (int i=0;i<Soldiers.size();i++)
             {
                 delete Soldiers[i];
             }
             Soldiers.clear();
             Window_State=5;
-            killTimer(eventId1);
+
             return;
         }
 
 
     }
-    if(Soldiers.size()==0 && Window_State>4)
+    if(Soldiers.size()==0 && Window_State>5)
     {
         ui->lineEdit->setText("统领不用气馁,再来一局");
         QMessageBox::warning(this,"Game Over","You Lose!");
@@ -417,6 +441,35 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             }
             isLoad[Aim.x/PIC_WIDTH][Aim.y/PIC_HEIGHT]=1;
         }
+        else if(Soldiers[i]->is_OnMove==true)
+        {
+            int _x=Aim.x-Soldiers[i]->Get_Loc().x;
+            int _y=Aim.y-Soldiers[i]->Get_Loc().y;
+            int tx=0,ty=0;
+            if(_x!=0)
+            {
+                tx=_x/qAbs(_x);
+            }
+            if(_y!=0)
+            {
+                ty=_y/qAbs(_y);
+            }
+            if(isLoad[Soldiers[i]->Get_Loc().x/PIC_WIDTH+tx][Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==3
+                            ||isLoad[Soldiers[i]->Get_Loc().x/PIC_WIDTH][Soldiers[i]->Get_Loc().y/PIC_HEIGHT+ty]==3)
+
+            {
+                Soldiers[i]->Change_Loc((Soldiers[i]->Get_Loc().x/PIC_WIDTH)*PIC_WIDTH,(Soldiers[i]->Get_Loc().y/PIC_HEIGHT)*PIC_HEIGHT);
+                Init_SoldierState(Soldiers[i]);
+                Soldier_State->popup(Pos);
+                Soldiers[i]->is_OnMove=false;
+                Soldier_OnMove=false;
+                Soldiers[i]->To_Static();
+                isLoad[Soldiers[i]->Get_Loc().x/PIC_WIDTH][Soldiers[i]->Get_Loc().y/PIC_HEIGHT]=2;
+                isLoad[Aim.x/PIC_WIDTH][Aim.y/PIC_HEIGHT]=1;
+            }
+
+        }
+
 
         if(Soldiers[i]->Get_Blood()<=0)
         {
@@ -444,6 +497,10 @@ void MainWindow::timerEvent(QTimerEvent * ev)
 
         if(Against_Soldiers[i]->Get_Blood()<=0)
         {
+            if (i==0 && is_BossAlive==true)
+            {
+                is_BossAlive=false;
+            }
             isLoad[Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]=1;
             delete Against_Soldiers[i];
             Against_Soldiers.erase(Against_Soldiers.begin()+i);
@@ -451,6 +508,14 @@ void MainWindow::timerEvent(QTimerEvent * ev)
         }
     }
 
+    if(Against_Soldiers.size()>0 && is_BossAlive==true)
+    {
+        for (int i=0;i<Against_Soldiers.size();i++)
+        {
+            if(Against_Soldiers[i]->Get_Blood()<15)
+            Against_Soldiers[i]->Kill_Blood(-15);
+        }
+    }
     if(Soldiers.size()>0)
     for(int i=0;i<Soldiers.size();i++)
     {
@@ -465,7 +530,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             Soldiers[i]->Pic_State++;
             if(Soldiers[i]->Pic_State==Soldiers[i]->Get_Picmax())
             {
-                if(Against_Soldiers.size()>0)
+                if(Against_Soldiers.size()>0  &&  Soldiers[i]->Get_Type()!=6)
                 for (int k=0;k<Against_Soldiers.size();k++)
                 {
                     if ((((Against_Soldiers[k]->Get_Loc().x==Soldiers[i]->Get_Loc().x-PIC_WIDTH)||(Against_Soldiers[k]->Get_Loc().x==Soldiers[i]->Get_Loc().x+PIC_WIDTH))
@@ -487,8 +552,48 @@ void MainWindow::timerEvent(QTimerEvent * ev)
                             {
                                 isLoad[Against_Soldiers[k]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[k]->Get_Loc().y/PIC_HEIGHT]=1;
                                 delete Against_Soldiers[k];
+                                if (k==0 && is_BossAlive==true)
+                                {
+                                    is_BossAlive=false;
+                                }
                                 Against_Soldiers.erase(Against_Soldiers.begin()+k);
                                 break;
+                            }
+                        }
+                    }
+                }
+                else if(Soldiers[i]->Get_Type()==6)
+                {
+                    if(Against_Soldiers.size()>0)
+                    {
+                        for (int k=0;k<Against_Soldiers.size();k++)
+                        {
+                            int _x=Soldiers[i]->Get_Loc().x-Against_Soldiers[k]->Get_Loc().x;
+                            int _y=Soldiers[i]->Get_Loc().y-Against_Soldiers[k]->Get_Loc().y;
+                            double dx=sqrt(_x*_x+_y+_y);
+                            if(dx<=180)
+                            {
+                                Against_Soldiers[k]->Kill_Blood(Soldiers[i]->Get_Attack()*(1-double(Against_Soldiers[k]->Get_Armor())));
+
+                                if(Against_Soldiers[k]->Get_Blood()>0)
+
+                                {
+                                    Against_Soldiers[k]->To_Attack();
+                                }
+                                else
+                                {
+                                    if(Against_Soldiers[k]->Get_Blood()<=0)
+                                    {
+                                        isLoad[Against_Soldiers[k]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[k]->Get_Loc().y/PIC_HEIGHT]=1;
+                                        delete Against_Soldiers[k];
+                                        if (k==0 && is_BossAlive==true)
+                                        {
+                                            is_BossAlive=false;
+                                        }
+                                        Against_Soldiers.erase(Against_Soldiers.begin()+k);
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
@@ -548,9 +653,10 @@ void MainWindow::timerEvent(QTimerEvent * ev)
                 Against_Soldiers[i]->Pic_State++;
                 if(Against_Soldiers[i]->Pic_State==Against_Soldiers[i]->Get_Picmax())
                 {
-                    if(Soldiers.size()>0)
+
                     Against_Soldiers[i]->is_Action=false;
                     Against_Soldiers[i]->To_Static();
+                    if(Soldiers.size()>0)
                     for (int k=0;k<Soldiers.size();k++)
                     {
                         if ((((Soldiers[k]->Get_Loc().x==Against_Soldiers[i]->Get_Loc().x-PIC_WIDTH)||(Soldiers[k]->Get_Loc().x==Against_Soldiers[i]->Get_Loc().x+PIC_WIDTH))
@@ -592,7 +698,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
         }
         if(is_allMoved==true)
         {
-            if(Window_State==21 || Window_State==22)
+            if(Window_State==21 || Window_State==22 || Window_State==23)
             {
                 Window_State++;
                 if(Window_State==22)
@@ -603,9 +709,13 @@ void MainWindow::timerEvent(QTimerEvent * ev)
                 {
                     ui->lineEdit->setText("颖川之战  回合3");
                 }
+                else if(Window_State==24)
+                {
+                    ui->lineEdit->setText("颖川之战  回合4");
+                }
 
             }
-            else if(Window_State==23 || Window_State==38)
+            else if(Window_State==24 || Window_State==38)
             {
                 ui->lineEdit->setText("统领不用气馁,再来一局");
                 QMessageBox::warning(this,"Game Over","You Lose");
@@ -615,7 +725,7 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             else if(Window_State>=30 && Window_State<38)
             {
                 Window_State++;
-                ui->lineEdit->setText("夏阳曲之战  回合"+QString::number(Window_State-30));
+                ui->lineEdit->setText("夏阳之战  回合"+QString::number(Window_State-30));
 
             }
 
@@ -629,8 +739,25 @@ void MainWindow::timerEvent(QTimerEvent * ev)
             if(Against_Soldiers.size()>0)
             for (int i=0;i<Against_Soldiers.size();i++)
             {
-                if(isLoad[(Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH)-1][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==1  &&
-                        isLoad[(Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH)-1][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]!=6)
+                if(i==0 && is_BossAlive==true && Against_Soldiers[i]->Get_Blood()<100)
+                {
+                    if(isLoad[(Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH)+1][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==1)
+                    {
+                        isLoad[Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]=1;
+                        Against_Soldiers[i]->Change_Loc(Against_Soldiers[i]->Get_Loc().x+PIC_WIDTH,Against_Soldiers[i]->Get_Loc().y);
+                        isLoad[Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]=-2;
+                    }
+                    else if(isLoad[(Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH)+1][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==2)
+                    {
+                        Against_Soldiers[i]->To_Attack();
+                    }
+                    else
+                    {
+                        Against_Soldiers[i]->To_Static();
+                    }
+                }
+
+                else if(isLoad[(Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH)-1][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]==1)
                 {
                     isLoad[Against_Soldiers[i]->Get_Loc().x/PIC_WIDTH][Against_Soldiers[i]->Get_Loc().y/PIC_HEIGHT]=1;
                     Against_Soldiers[i]->Change_Loc(Against_Soldiers[i]->Get_Loc().x-PIC_WIDTH,Against_Soldiers[i]->Get_Loc().y);
@@ -669,6 +796,42 @@ void MainWindow::Init_Soldiers()
             isLoad[i][j]=1;
         }
     }
+    if(Window_State==3)
+    {
+        Against_Soldiers.append(new Soldier("ZhangJiao",PIC_WIDTH*25,PIC_HEIGHT*9,200,100,4,10,":/images/Res/Boss.jpg"));
+        isLoad[25][9]=-2;
+        is_BossAlive=true;
+        Against_Soldiers[Against_Soldiers.size()-1]->Pic_State=0;
+        Against_Soldiers[Against_Soldiers.size()-1]->Set_TySt(7,1);
+        for (int k=0;k<9;k++)
+        {
+            int i=Ag_Sol_x[k];
+            int j=Ag_Sol_y[k];
+            Against_Soldiers.append(new Soldier(PIC_WIDTH*(i+6),PIC_HEIGHT*(j+4),100,100,4,10));
+            isLoad[i+6][j+4]=-2;
+            Against_Soldiers[Against_Soldiers.size()-1]->Pic_State=0;
+            Against_Soldiers[Against_Soldiers.size()-1]->Set_TySt(4,1);
+        }
+        for(int k=0;k<10;k++)
+        {
+            int i=Mine_Sol_x[k];
+            int j=Mine_Sol_y[k];
+            Soldiers.append(new Soldier(PIC_WIDTH*(i-4),PIC_HEIGHT*(j+5),100,100,4,10));
+            isLoad[i-4][j+5]=2;
+            Soldiers[Soldiers.size()-1]->Pic_State=0;
+            Soldiers[Soldiers.size()-1]->Set_TySt(5,2);
+        }
+        for (int j=8;j<14;j++)
+        {
+            isLoad[3][j]=2;
+            Soldiers.append(new Soldier(PIC_WIDTH*3,PIC_HEIGHT*j,100,100,4,10));
+            Soldiers[Soldiers.size()-1]->Pic_State=0;
+            Soldiers[Soldiers.size()-1]->Set_TySt(6,2);
+        }
+
+    }
+
+
 
     for(int k=0;k<10;k++)
     {
@@ -690,28 +853,7 @@ void MainWindow::Init_Soldiers()
         Against_Soldiers[Against_Soldiers.size()-1]->Set_TySt(2,1);
     }
 
-    if(Window_State==3)
-    {
-        for (int k=0;k<9;k++)
-        {
-            int i=Ag_Sol_x[k];
-            int j=Ag_Sol_y[k];
-            Against_Soldiers.append(new Soldier(PIC_WIDTH*(i+6),PIC_HEIGHT*(j+4),100,100,4,10));
-            isLoad[i+6][j+4]=-2;
-            Against_Soldiers[Against_Soldiers.size()-1]->Pic_State=0;
-            Against_Soldiers[Against_Soldiers.size()-1]->Set_TySt(4,1);
-        }
-        for(int k=0;k<10;k++)
-        {
-            int i=Mine_Sol_x[k];
-            int j=Mine_Sol_y[k];
-            Soldiers.append(new Soldier(PIC_WIDTH*(i-4),PIC_HEIGHT*(j+5),100,100,4,10));
-            isLoad[i-4][j+5]=2;
-            Soldiers[Soldiers.size()-1]->Pic_State=0;
-            Soldiers[Soldiers.size()-1]->Set_TySt(5,2);
-        }
 
-    }
 
 
     //init the npc
@@ -913,6 +1055,16 @@ void MainWindow::Init_SoldierDetail(Soldier * _soldier)
 {
     Soldier_Detail=new QMenu(this);
     Set_MenuStyle(Soldier_Detail);
+
+
+    if(_soldier->Get_Name()=="ZhangJiao" && _soldier->Get_Stand()==1 && is_BossAlive==true)
+    {
+        QAction *pAction_name=new QAction(Soldier_Detail);
+        pAction_name->setText("Name:"+_soldier->Get_Name());
+        Soldier_Detail->addAction(pAction_name);
+    }
+
+
     QAction *pAction_blood=new QAction(Soldier_Detail);
     pAction_blood->setText("Blood:"+QString::number(_soldier->Get_Blood()));
     Soldier_Detail->addAction(pAction_blood);

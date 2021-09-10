@@ -35,6 +35,17 @@ void Soldier::Set_TySt(int _type, int _stand)
         Attack_Path=":/images/Res/bubing.png";
         Img.load(Path);
     }
+    else if(Type==6)
+    {
+        Path=":/images/Res/arrow.png";
+        Attack_Path=":/images/Res/arrow.png";
+        Img.load(Path);
+    }
+    else if(Type==7)
+    {
+        Path=":/images/Res/Boss.jpg";
+        Attack_Path=":/images/Res/Boss/jpg";
+    }
     Convert_Tranparent();
     Line=Stand;
 
@@ -46,6 +57,8 @@ int Soldier::Get_Stand() const
 {
     return Stand;
 }
+
+
 
 int Soldier::Get_Type() const
 {
@@ -71,6 +84,14 @@ void Soldier::To_Attack()
     {
         Set_Attack(20);
     }
+    else if(Type==6)
+    {
+        Set_Attack(60);
+    }
+    else if(Type==7)
+    {
+        Set_Attack(50);
+    }
 }
 
 void Soldier::To_Defense()
@@ -82,6 +103,14 @@ void Soldier::To_Defense()
     Line=0;
     Set_Armor(0.3);
     if(Type==4 || Type==5)
+    {
+        Set_Armor(0.5);
+    }
+    else if(Type==6)
+    {
+        Set_Armor(0.2);
+    }
+    else if(Type==7)
     {
         Set_Armor(0.5);
     }
@@ -104,9 +133,24 @@ void Soldier::To_Static()
         Set_Armor(0.3);
         Set_Attack(20);
     }
+    else if(Type==6)
+    {
+        Set_Armor(0.1);
+        Set_Attack(60);
+    }
+    else if(Type==7)
+    {
+        Set_Armor(0.5);
+        Set_Attack(50);
+    }
 }
 
 int Soldier::Get_Line() const
 {
     return Line;
+}
+
+QString Soldier::Get_Name() const
+{
+    return Name;
 }

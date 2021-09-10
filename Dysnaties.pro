@@ -12,7 +12,6 @@ CONFIG += c++11
 SOURCES += \
     Barrier.cpp \
     City.cpp \
-    Leader.cpp \
     Soldier.cpp \
     Unit.cpp \
     escwidget.cpp \
@@ -24,7 +23,6 @@ HEADERS += \
     City.h \
     Const.h \
     Heads.h \
-    Leader.h \
     Soldier.h \
     Struct_Use.h \
     Unit.h \

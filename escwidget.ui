@@ -35,7 +35,7 @@
        </size>
       </property>
       <property name="text">
-       <string>Start</string>
+       <string>开始</string>
       </property>
      </widget>
     </item>
@@ -48,7 +48,7 @@
        </size>
       </property>
       <property name="text">
-       <string>Introduction</string>
+       <string>说明</string>
       </property>
      </widget>
     </item>
@@ -61,7 +61,7 @@
        </size>
       </property>
       <property name="text">
-       <string>Continue</string>
+       <string>继续</string>
       </property>
      </widget>
     </item>
